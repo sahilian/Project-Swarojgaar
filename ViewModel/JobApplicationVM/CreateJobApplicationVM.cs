@@ -11,6 +11,8 @@ namespace Swarojgaar.ViewModel.JobApplicationVM
         [ForeignKey("Job")]
         public int JobId { get; set; }
         public Job Job { get; set; }
+        public string UserId { get; set; }
+        public User User { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public double Salary { get; set; }

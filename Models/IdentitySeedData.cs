@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Data;
+
 
 namespace Swarojgaar.Models
 {
     public static class IdentitySeedData
     {
+
         private const string adminUser = "Admin";
         private const string adminPassword = "Secret123$";
 
@@ -19,10 +22,19 @@ namespace Swarojgaar.Models
                 context.Database.Migrate();
             }
 
+            RoleManager<IdentityRole> roleManager = app.ApplicationServices
+                .CreateScope().ServiceProvider
+                .GetRequiredService<RoleManager<IdentityRole>>();
             UserManager<IdentityUser> userManager = app.ApplicationServices
                 .CreateScope().ServiceProvider
                 .GetRequiredService<UserManager<IdentityUser>>();
 
+            string roleName = "Admin";
+
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
             IdentityUser user = await userManager.FindByNameAsync(adminUser);
 
             if (user == null)
@@ -33,6 +45,8 @@ namespace Swarojgaar.Models
                 user.PhoneNumber = "9840030129";
                 
                 await userManager.CreateAsync(user, adminPassword);
+
+                await userManager.AddToRoleAsync(user, "Admin");
             }
         }
     }

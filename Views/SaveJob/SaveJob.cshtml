@@ -5,43 +5,38 @@
     ViewData["Title"] = "GetDetails";
 }
 
-<h1>Apply to @Html.DisplayFor(model => model.Title)?</h1>
+<h1>Save this job!</h1>
 
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Salary)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salary)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ExpiryDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FormattedExpiryDate)
         </dd>
     </dl>
 </div>
-<form method="post" asp-controller="JobApplication" asp-action="CreateJobApplication">
-    <input type="hidden" asp-for="JobId" />
-    <input type="submit" value="Apply" asp-route-id="@Model?.JobId" class="btn btn-success" />
+<div>
+    <a asp-controller="SaveJob" asp-action="Index" asp-route-id="@Model?.JobId" class="btn btn-success">Save</a>
     <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to List</a>
-</form>
-@* <div>
-    <a asp-controller="JobApplication" asp-action="CreateJobApplication" asp-route-id="@Model?.JobId" class="btn btn-success">Apply</a>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to List</a>
-</div> *@
+</div>

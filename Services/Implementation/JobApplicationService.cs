@@ -32,11 +32,12 @@ namespace Swarojgaar.Services.Implementation
             }
         }
 
-        public void CreateJobApplication(CreateJobApplicationVM createJobApplication)
+        public void CreateJobApplication(CreateJobApplicationVM createJobApplication, string userId)
         {
             try
             {
                 JobApplication jobApplication = _mapper.Map<JobApplication>(createJobApplication);
+                jobApplication.UserId = userId;
                 _jobApplicationRepository.Create(jobApplication);
             }
             catch (Exception e)
