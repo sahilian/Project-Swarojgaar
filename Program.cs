@@ -1,7 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Data;
-using Microsoft.AspNetCore.Identity;
-using Swarojgaar.Migrations;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Implementation;
 using Swarojgaar.Repository.Interface;
@@ -22,7 +21,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionStrings));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
+builder.Services.AddDefaultIdentity<User>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
     .AddDefaultTokenProviders()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();

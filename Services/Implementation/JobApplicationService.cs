@@ -3,7 +3,6 @@ using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobApplicationVM;
-using Swarojgaar.ViewModel.JobVM;
 
 namespace Swarojgaar.Services.Implementation
 {
@@ -22,7 +21,7 @@ namespace Swarojgaar.Services.Implementation
             try
             {
                 List<JobApplication> jobApplications = _jobApplicationRepository.GetAll();
-                List<GetAllJobApplicationsVM> getAllJobApplications =_mapper.Map<List<GetAllJobApplicationsVM>>(jobApplications);
+                List<GetAllJobApplicationsVM> getAllJobApplications = _mapper.Map<List<GetAllJobApplicationsVM>>(jobApplications);
                 return getAllJobApplications;
             }
             catch (Exception e)
@@ -32,12 +31,12 @@ namespace Swarojgaar.Services.Implementation
             }
         }
 
-        public void CreateJobApplication(CreateJobApplicationVM createJobApplication, string userId)
+        public void CreateJobApplication(CreateJobApplicationVM createJobApplication)
         {
             try
             {
-                JobApplication jobApplication = _mapper.Map<JobApplication>(createJobApplication);
-                jobApplication.UserId = userId;
+                var jobApplication = _mapper.Map<JobApplication>(createJobApplication);
+                //jobApplication.UserId = userId;
                 _jobApplicationRepository.Create(jobApplication);
             }
             catch (Exception e)

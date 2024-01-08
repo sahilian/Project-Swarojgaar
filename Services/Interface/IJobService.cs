@@ -6,9 +6,9 @@ public interface IJobService
 {
     List<GetAllJobsVM> GetAllJobs();
     DetailsJobVM GetJobDetails(int id);
-    void CreateJob(CreateJobVM createViewModel);
-    void EditJob(EditJobVM  editViewModel);
-    void DeleteJob(int id);
+    bool CreateJob(CreateJobVM createViewModel);
+    bool EditJob(EditJobVM  editViewModel);
+    bool DeleteJob(int id);
     EditJobVM EditJob(int id);
 
 }

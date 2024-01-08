@@ -58,15 +58,12 @@
 //    }
 //}
 
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobApplicationVM;
-using Swarojgaar.ViewModel.JobVM;
-using System;
-using System.Security.Claims;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 
 namespace Swarojgaar.Controllers
 {
@@ -107,12 +104,15 @@ namespace Swarojgaar.Controllers
         {
             try
             {
-                var userId = _userManager.GetUserId(User);
+                createJobApplication.UserId = _userManager.GetUserId(User);
+
 
                 var jobDetails = _jobService.GetJobDetails(createJobApplication.JobId);
+
                 _mapper.Map(jobDetails, createJobApplication);
 
-                _jobApplicationService.CreateJobApplication(createJobApplication, userId);
+                _jobApplicationService.CreateJobApplication(createJobApplication);
+
                 TempData["ResultOk"] = "Job Applied Successfully !";
                 return RedirectToAction("Index", "JobApplication");
             }
