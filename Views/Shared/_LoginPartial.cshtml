@@ -42,15 +42,15 @@ else
 
         @if (user.UserName=="admin@gmail.com")
         {
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/GetAll" title="Manage">Hello Admin @UserManager.GetUserName(User)!</a>
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello Admin @UserManager.GetUserName(User)!</a>
         }
         else if (roles.Contains("Job_Provider"))
         {
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/GetAll" title="Manage">Hello Job_Provider @UserManager.GetUserName(User)!</a>
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello Job_Provider @UserManager.GetUserName(User)!</a>
         }
         else if (roles.Contains("Job_Seeker"))
         {
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/GetAll" title="Manage">Hello Job_Seeker @UserManager.GetUserName(User)!</a>
+        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello Job_Seeker @UserManager.GetUserName(User)!</a>
         }
 
 

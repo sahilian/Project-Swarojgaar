@@ -58,15 +58,15 @@
 //    }
 //}
 
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Swarojgaar.Data;
+using Swarojgaar.Models;
+using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobApplicationVM;
-using Swarojgaar.ViewModel.JobVM;
-using System;
-using System.Security.Claims;
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 
 namespace Swarojgaar.Controllers
 {
@@ -76,16 +76,22 @@ namespace Swarojgaar.Controllers
         private readonly IJobService _jobService;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IGenericRepository<Job> _genericRepository;
+        private readonly ApplicationDbContext _context;
 
         public JobApplicationController(
             IJobApplicationService jobApplicationService,
             IJobService jobService,
             IMapper mapper,
+            ApplicationDbContext context,
+            IGenericRepository<Job> genericRepository,
             UserManager<IdentityUser> userManager)
         {
+            _genericRepository = genericRepository;
             _jobService = jobService;
             _jobApplicationService = jobApplicationService;
             _mapper = mapper;
+            _context = context;
             _userManager = userManager;
         }
 
@@ -109,10 +115,22 @@ namespace Swarojgaar.Controllers
             {
                 var userId = _userManager.GetUserId(User);
 
-                var jobDetails = _jobService.GetJobDetails(createJobApplication.JobId);
-                _mapper.Map(jobDetails, createJobApplication);
+                var jobDetails = _genericRepository.GetDetails(createJobApplication.JobId);
 
-                _jobApplicationService.CreateJobApplication(createJobApplication, userId);
+                CreateJobApplicationVM createjob = new CreateJobApplicationVM()
+                {
+                    UserId = userId,
+                    Title = jobDetails.Title,
+                    Description = jobDetails.Description,
+                    Salary = jobDetails.Salary,
+                    ExpiryDate = jobDetails.ExpiryDate,
+                    JobId = jobDetails.JobId
+                };
+
+
+                //_mapper.Map(jobDetails, createJobApplication);
+
+                _jobApplicationService.CreateJobApplication(createjob, userId);
                 TempData["ResultOk"] = "Job Applied Successfully !";
                 return RedirectToAction("Index", "JobApplication");
             }

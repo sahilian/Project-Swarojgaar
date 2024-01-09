@@ -2,6 +2,7 @@
 using Swarojgaar.Models;
 using Swarojgaar.ViewModel.JobApplicationVM;
 using Swarojgaar.ViewModel.JobVM;
+using Swarojgaar.ViewModel.SavedJobVM;
 
 namespace Swarojgaar.MapperProfile
 {
@@ -16,6 +17,8 @@ namespace Swarojgaar.MapperProfile
             CreateMap<Job, DeleteJobVM>().ReverseMap();
             CreateMap<JobApplication, CreateJobApplicationVM>().ReverseMap();
             CreateMap<JobApplication, GetAllJobApplicationsVM>().ReverseMap();
+            CreateMap<SavedJob, SaveJobVM>().ReverseMap();
+            CreateMap<SavedJob, GetAllJobApplicationsVM>().ReverseMap();
 
         }
     }

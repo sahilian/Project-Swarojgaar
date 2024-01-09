@@ -8,5 +8,5 @@ public interface IJobApplicationService
     List<GetAllJobApplicationsVM> GetAllJobApplications();
 
 
-    void CreateJobApplication(CreateJobApplicationVM createJobApplication, string userId);
+    bool CreateJobApplication(CreateJobApplicationVM createJobApplication, string userId);
 }

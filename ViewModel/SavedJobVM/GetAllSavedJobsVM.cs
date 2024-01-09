@@ -2,12 +2,12 @@
 using Swarojgaar.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Swarojgaar.ViewModel.JobApplicationVM
+namespace Swarojgaar.ViewModel.SavedJobVM
 {
-    public class GetAllJobApplicationsVM
+    public class GetAllSavedJobsVM
     {
         [Key]
-        public int JobApplicationId { get; set; }
+        public int SavedJobId { get; set; }
         [ForeignKey("Job")]
         public int JobId { get; set; }
         public Job Job { get; set; }

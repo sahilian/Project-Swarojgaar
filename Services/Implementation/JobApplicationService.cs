@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobApplicationVM;
 using Swarojgaar.ViewModel.JobVM;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Swarojgaar.Services.Implementation
 {
@@ -11,11 +14,13 @@ namespace Swarojgaar.Services.Implementation
     {
         private readonly IGenericRepository<JobApplication> _jobApplicationRepository;
         private readonly IMapper _mapper;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public JobApplicationService(IGenericRepository<JobApplication> jobApplicationRepository, IMapper mapper)
+        public JobApplicationService(IGenericRepository<JobApplication> jobApplicationRepository, IMapper mapper, UserManager<IdentityUser> userManager)
         {
             _jobApplicationRepository = jobApplicationRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
         public List<GetAllJobApplicationsVM> GetAllJobApplications()
         {
@@ -32,13 +37,13 @@ namespace Swarojgaar.Services.Implementation
             }
         }
 
-        public void CreateJobApplication(CreateJobApplicationVM createJobApplication, string userId)
+        public bool CreateJobApplication(CreateJobApplicationVM createJobApplication, string userId)
         {
             try
             {
                 JobApplication jobApplication = _mapper.Map<JobApplication>(createJobApplication);
-                jobApplication.UserId = userId;
-                _jobApplicationRepository.Create(jobApplication);
+                //jobApplication.UserId = userId;
+                return _jobApplicationRepository.Create(jobApplication);
             }
             catch (Exception e)
             {

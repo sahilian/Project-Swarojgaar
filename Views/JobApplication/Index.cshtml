@@ -1,38 +1,58 @@
-﻿@model List<Swarojgaar.ViewModel.JobApplicationVM.GetAllJobApplicationsVM>
+﻿@using System.Security.Claims
+@model List<Swarojgaar.ViewModel.JobApplicationVM.GetAllJobApplicationsVM>
+
+@if (TempData["ResultOk"] != null)
+{
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["ResultOk"]');
+    </script>
+}
+
+@{
+    // Get the current user's information
+    // var currentUser = Context.User;
+    var userId = Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var userAppliedJobs = Model.Where(x => x.UserId == userId).ToList();
+}
 
 <h2>Your Applied Jobs</h2>
 
-<table class="table table-bordered table-hover">
-    <thead>
-    <tr>
-        <th>
-            Title
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            Salary
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
+@if (userAppliedJobs.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Salary)
-            </td>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Salary
+            </th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in userAppliedJobs)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Salary)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item"><a class="page-link" href="#">Previous</a></li>

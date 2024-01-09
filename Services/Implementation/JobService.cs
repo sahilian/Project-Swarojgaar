@@ -45,13 +45,13 @@ public class JobService : IJobService
         }
     }
 
-    public void CreateJob(CreateJobVM createViewModel)
+    public bool CreateJob(CreateJobVM createViewModel)
     {
 
         try
         {
             Job job = _mapper.Map<Job>(createViewModel);
-            _jobRepository.Create(job);
+            return _jobRepository.Create(job);
         }
         catch (Exception e)
         {
@@ -75,12 +75,12 @@ public class JobService : IJobService
         }
     }
 
-    public void EditJob(EditJobVM editViewModel)
+    public bool EditJob(EditJobVM editViewModel)
     {
-        Job job = _mapper.Map<Job>(editViewModel);
         try
         {
-            _jobRepository.Edit(job);
+            Job job = _mapper.Map<Job>(editViewModel);
+            return _jobRepository.Edit(job);
         }
         catch (Exception e)
         {
@@ -90,11 +90,11 @@ public class JobService : IJobService
     }
 
 
-    public void DeleteJob(int id)
+    public bool DeleteJob(int id)
     {
         try
         {
-            _jobRepository.Delete(id);
+            return _jobRepository.Delete(id);
         }
         catch (Exception e)
         {

@@ -82,9 +82,9 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
-            [Required]
-            [Display(Name = "Phone Number")]
-            public long PhoneNumber { get; set; }
+            //[Required]
+            //[Display(Name = "Phone Number")]
+            //public long PhoneNumber { get; set; }
             [Required]
             [Display(Name = "Location")]
             public string Location { get; set; }
@@ -152,7 +152,7 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
                 //---------->Added here
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.PhoneNumber = Input.PhoneNumber;
+                //user.PhoneNumber = Input.PhoneNumber;
                 user.Location = Input.Location;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

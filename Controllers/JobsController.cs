@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Swarojgaar.Data;
-using Swarojgaar.Models;
-using Swarojgaar.Services.Implementation;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobVM;
 
@@ -52,7 +43,7 @@ namespace Swarojgaar.Controllers
                 TempData["ResultOk"] = "Data Created Successfully !";
                 return RedirectToAction("Index", "Jobs");
             }
-            catch(DbUpdateException ex)
+            catch (DbUpdateException ex)
             {
                 Console.WriteLine(ex);
                 throw;
@@ -91,7 +82,7 @@ namespace Swarojgaar.Controllers
         {
             _jobService.DeleteJob(id);
             TempData["ResultOk"] = "Data Deleted Successfully !";
-            return RedirectToAction("Index","Jobs");
+            return RedirectToAction("Index", "Jobs");
         }
     }
 }

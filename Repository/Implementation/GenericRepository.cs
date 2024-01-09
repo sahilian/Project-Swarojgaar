@@ -26,22 +26,31 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return entity;
     }
 
-    public void Create(T entity)
+    public bool Create(T entity)
     {
         _dbSet.Add(entity);
-        _context.SaveChanges();
+        int affectedRows = _context.SaveChanges();
+        return affectedRows > 0;
     }
 
-    public void Edit(T entity)
+    public bool Edit(T entity)
     {
         _dbSet.Update(entity);
-        _context.SaveChanges();
+        int affectedRows = _context.SaveChanges();
+        return affectedRows > 0;
     }
 
-    public void Delete(int id)
+    public bool Delete(int id)
     {
-        T job = _dbSet.Find(id)!;
-        _dbSet.Remove(job);
-        _context.SaveChanges();
+        T entity = _dbSet.Find(id);
+
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                int affectedRows = _context.SaveChanges();
+                return affectedRows > 0;
+            }
+
+            return false;
     }
 }
