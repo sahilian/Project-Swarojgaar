@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace Swarojgaar.Models
 {
@@ -14,7 +15,7 @@ namespace Swarojgaar.Models
 
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public User User { get; set; }
+        public IdentityUser User { get; set; }
 
         public string Title { get; set; }
 

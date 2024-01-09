@@ -50,7 +50,7 @@
                         @Html.DisplayFor(modelItem => item.Salary)
                     </td>
                     <td>
-                        <a asp-controller="" asp-action="" asp-route-id="@item.JobId" class="btn btn-success">Apply</a>
+                        <a asp-controller="JobApplication" asp-action="CreateJobApplication" asp-route-id="@item.JobId" class="btn btn-success">Apply</a>
                         <a asp-action="" asp-route-id="@item.JobId" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>

@@ -27,7 +27,14 @@ namespace Swarojgaar.Data
                 .HasOne(ja => ja.User)
                 .WithMany()
                 .HasForeignKey(ja => ja.UserId);
+
+            modelBuilder.Entity<SavedJob>()
+                .HasOne(sj => sj.User)
+                .WithMany()
+                .HasForeignKey(sj => sj.UserId);
+
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
+
         }
 
     }
