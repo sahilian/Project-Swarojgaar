@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Swarojgaar.Models;
+﻿using Swarojgaar.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Swarojgaar.ViewModel.SavedJobVM
 {
-    public class SaveJobVM
+    public class SavedJobDetailVM
     {
         [Key]
         public int SavedJobId { get; set; }
@@ -18,6 +18,5 @@ namespace Swarojgaar.ViewModel.SavedJobVM
         public double Salary { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string FormattedExpiryDate => ExpiryDate.ToShortDateString();
-
     }
 }

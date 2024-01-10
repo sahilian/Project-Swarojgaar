@@ -5,13 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using Swarojgaar.Data;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
+using Swarojgaar.Services.Implementation;
 using Swarojgaar.Services.Interface;
+using Swarojgaar.ViewModel.JobApplicationVM;
 using Swarojgaar.ViewModel.SavedJobVM;
 
 namespace Swarojgaar.Controllers
 {
     public class SaveJobController : Controller
     {
+        private readonly IJobApplicationService _jobApplicationService;
         private readonly ISaveJobService _saveJobService;
         private readonly IJobService _jobService;
         private readonly IMapper _mapper;
@@ -20,6 +23,7 @@ namespace Swarojgaar.Controllers
         private readonly ApplicationDbContext _context;
 
         public SaveJobController(
+            IJobApplicationService jobApplicationService,
             ISaveJobService saveJobService,
             IJobService jobService,
             IMapper mapper,
@@ -27,6 +31,7 @@ namespace Swarojgaar.Controllers
             IGenericRepository<Job> genericRepository,
             UserManager<IdentityUser> userManager)
         {
+            _jobApplicationService = jobApplicationService;
             _genericRepository = genericRepository;
             _jobService = jobService;
             _saveJobService = saveJobService;
@@ -66,9 +71,6 @@ namespace Swarojgaar.Controllers
                     ExpiryDate = jobDetails.ExpiryDate,
                     JobId = jobDetails.JobId
                 };
-
-
-
                 _saveJobService.SaveJob(saveJob, userId);
                 TempData["ResultOk"] = "Job Saved Successfully !";
                 return RedirectToAction("Index", "SaveJob");
@@ -78,6 +80,43 @@ namespace Swarojgaar.Controllers
                 // Log the exception or handle it appropriately
                 Console.WriteLine(e);
                 TempData["ResultError"] = "An error occurred while saving the job.";
+                return RedirectToAction("Index", "JobApplication");
+            }
+        }
+        [HttpGet]
+        public IActionResult ApplyAndRemove(int savedJobId)
+        {
+            return View(_saveJobService.GetSavedJobDetail(savedJobId));
+        }
+
+        [HttpPost]
+        public IActionResult ApplyAndRemove(CreateJobApplicationVM createJobApplication, int savedJobId)
+        {
+            try
+            {
+                var userId = _userManager.GetUserId(User);
+
+                var jobDetails = _genericRepository.GetDetails(savedJobId);
+
+                CreateJobApplicationVM createjob = new CreateJobApplicationVM()
+                {
+                    UserId = userId,
+                    Title = jobDetails.Title,
+                    Description = jobDetails.Description,
+                    Salary = jobDetails.Salary,
+                    ExpiryDate = jobDetails.ExpiryDate,
+                    JobId = savedJobId
+                };
+                _jobApplicationService.CreateJobApplication(createjob, userId);
+                _saveJobService.ApplyAndRemove(savedJobId, userId);
+                TempData["ResultOk"] = "Job Applied Successfully !";
+                return RedirectToAction("Index", "JobApplication");
+            }
+            catch (Exception e)
+            {
+                // Log the exception or handle it appropriately
+                Console.WriteLine(e);
+                TempData["ResultError"] = "An error occurred while applying for the job.";
                 return RedirectToAction("Index", "JobApplication");
             }
         }

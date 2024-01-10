@@ -17,5 +17,7 @@ namespace Swarojgaar.ViewModel.SavedJobVM
         public string UserId { get; set; }
         public double Salary { get; set; }
         public DateTime ExpiryDate { get; set; }
+        public string FormattedExpiryDate => ExpiryDate.ToShortDateString();
+
     }
 }

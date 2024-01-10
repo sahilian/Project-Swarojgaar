@@ -19,6 +19,7 @@ namespace Swarojgaar.MapperProfile
             CreateMap<JobApplication, GetAllJobApplicationsVM>().ReverseMap();
             CreateMap<SavedJob, SaveJobVM>().ReverseMap();
             CreateMap<SavedJob, GetAllSavedJobsVM>().ReverseMap();
+            CreateMap<SavedJob, SavedJobDetailVM>().ReverseMap();
 
         }
     }
