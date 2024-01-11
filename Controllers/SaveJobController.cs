@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Data;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
@@ -95,6 +96,7 @@ namespace Swarojgaar.Controllers
         [HttpPost]
         public IActionResult ApplyAndRemove(CreateJobApplicationVM createJobApplication, int savedJobId)
         {
+            using var transaction = _context.Database.BeginTransaction();
             try
             {
                 var userId = _userManager.GetUserId(User);
@@ -113,12 +115,13 @@ namespace Swarojgaar.Controllers
                 };
                 _jobApplicationService.CreateJobApplication(createjob, userId);
                 _saveJobService.ApplyAndRemove(savedJobId, userId);
+                transaction.Commit();
                 TempData["ResultOk"] = "Job Applied Successfully !";
                 return RedirectToAction("Index", "JobApplication");
             }
             catch (Exception e)
             {
-                // Log the exception or handle it appropriately
+                transaction.Rollback();
                 Console.WriteLine(e);
                 TempData["ResultError"] = "An error occurred while applying for the job.";
                 return RedirectToAction("Index", "JobApplication");
