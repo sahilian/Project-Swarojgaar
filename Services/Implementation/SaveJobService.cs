@@ -11,21 +11,22 @@ namespace Swarojgaar.Services.Implementation
 {
     public class SaveJobService : ISaveJobService
     {
-        private readonly IGenericRepository<SavedJob> _savedJobRepository;
         private readonly IJobApplicationService _jobApplicationService;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ISavedJobRepository _savedJobRepository;
 
         public SaveJobService(
-            IGenericRepository<SavedJob> savedJobRepository,
             IMapper mapper,
             UserManager<IdentityUser> userManager,
-            IJobApplicationService jobApplicationService)
+            IJobApplicationService jobApplicationService,
+            ISavedJobRepository savedJobRepository)
         {
             _savedJobRepository = savedJobRepository;
             _mapper = mapper;
             _userManager = userManager;
             _jobApplicationService = jobApplicationService;
+            _savedJobRepository = savedJobRepository;
         }
 
         public List<GetAllSavedJobsVM> GetAllSavedJobs()
@@ -47,7 +48,7 @@ namespace Swarojgaar.Services.Implementation
         {
             try
             {
-                SavedJob savedjobdetail = _savedJobRepository.GetDetails(id);
+                SavedJob savedjobdetail = _savedJobRepository.GetBySavedJobId(id);
                 SavedJobDetailVM savedJobDetail = _mapper.Map<SavedJobDetailVM>(savedjobdetail);
                 return savedJobDetail;
             }
@@ -63,7 +64,7 @@ namespace Swarojgaar.Services.Implementation
             try
             {
                 SavedJob savedJob = _mapper.Map<SavedJob>(saveJob);
-                return _savedJobRepository.Create(savedJob);
+                return _savedJobRepository.Save(savedJob);
             }
             catch (Exception e)
             {
@@ -75,25 +76,10 @@ namespace Swarojgaar.Services.Implementation
         {
             try
             {
-                var savedJob = _savedJobRepository.GetDetails(savedJobId);
+                var savedJob = _savedJobRepository.GetBySavedJobId(savedJobId);
 
                 if (savedJob != null)
                 {
-                    //// Create a new JobApplication entry
-                    //CreateJobApplicationVM jobApplication = new CreateJobApplicationVM()
-                    //{
-                    //    // Set other properties
-                    //    UserId = savedJob.UserId,
-                    //    JobId = savedJob.JobId,
-                    //    Title = savedJob.Title,
-                    //    Description = savedJob.Description,
-                    //    Salary = savedJob.Salary,
-                    //    ExpiryDate = savedJob.ExpiryDate
-                    //};
-                    //_jobApplicationService.CreateJobApplication(jobApplication, userId);
-
-                    // Add the JobApplication entry (you may need to inject and use the JobApplication repository)
-                    // Remove the SavedJob entry
                     _savedJobRepository.Delete(savedJobId);
                     return true;
                 }

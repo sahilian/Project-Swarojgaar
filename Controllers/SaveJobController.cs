@@ -21,6 +21,7 @@ namespace Swarojgaar.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IGenericRepository<Job> _genericRepository;
         private readonly ApplicationDbContext _context;
+        private readonly ISavedJobRepository _savedJobRepository;
 
         public SaveJobController(
             IJobApplicationService jobApplicationService,
@@ -29,7 +30,8 @@ namespace Swarojgaar.Controllers
             IMapper mapper,
             ApplicationDbContext context,
             IGenericRepository<Job> genericRepository,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            ISavedJobRepository savedJobRepository)
         {
             _jobApplicationService = jobApplicationService;
             _genericRepository = genericRepository;
@@ -38,6 +40,7 @@ namespace Swarojgaar.Controllers
             _mapper = mapper;
             _context = context;
             _userManager = userManager;
+            _savedJobRepository = savedJobRepository;
         }
 
         public IActionResult Index()
@@ -96,7 +99,8 @@ namespace Swarojgaar.Controllers
             {
                 var userId = _userManager.GetUserId(User);
 
-                var jobDetails = _genericRepository.GetDetails(savedJobId);
+                var jobDetails = _savedJobRepository.GetBySavedJobId(savedJobId);
+
 
                 CreateJobApplicationVM createjob = new CreateJobApplicationVM()
                 {
@@ -105,7 +109,7 @@ namespace Swarojgaar.Controllers
                     Description = jobDetails.Description,
                     Salary = jobDetails.Salary,
                     ExpiryDate = jobDetails.ExpiryDate,
-                    JobId = savedJobId
+                    JobId = jobDetails.JobId
                 };
                 _jobApplicationService.CreateJobApplication(createjob, userId);
                 _saveJobService.ApplyAndRemove(savedJobId, userId);

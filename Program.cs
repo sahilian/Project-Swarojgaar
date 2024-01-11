@@ -16,6 +16,7 @@ var connectionStrings = builder.Configuration.GetConnectionString("DefaultConnec
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
+builder.Services.AddScoped<ISavedJobRepository, SavedJobRepository>();
 builder.Services.AddScoped<ISaveJobService, SaveJobService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAutoMapper(typeof(Program));
