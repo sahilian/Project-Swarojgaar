@@ -92,5 +92,18 @@ namespace Swarojgaar.Services.Implementation
                 throw;
             }
         }
+
+        public bool DeleteSavedJob(int savedJobId)
+        {
+            try
+            {
+                return _savedJobRepository.Delete(savedJobId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

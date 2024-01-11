@@ -9,5 +9,6 @@ public interface ISaveJobService
     bool SaveJob(SaveJobVM saveJob, string userId);
     public bool ApplyAndRemove(int savedJobId, string userId);
     public SavedJobDetailVM GetSavedJobDetail(int id);
+    public bool DeleteSavedJob(int savedJobId);
 
 }

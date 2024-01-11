@@ -52,7 +52,7 @@
                     <td>
                         <input type="hidden" name="savedJobId" value="@item.SavedJobId">
                         <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-savedJobId="@item.SavedJobId" class="btn btn-success">Apply</a>
-                        <a asp-action="" asp-route-id="@item.SavedJobId" class="btn btn-danger">Delete</a>
+                        <a asp-controller="SaveJob" asp-action="DeleteSavedJob" asp-route-savedJobId="@item.SavedJobId" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             }

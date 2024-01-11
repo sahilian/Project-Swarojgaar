@@ -127,5 +127,19 @@ namespace Swarojgaar.Controllers
                 return RedirectToAction("Index", "JobApplication");
             }
         }
+
+        [HttpGet]
+        public IActionResult DeleteSavedJob(int savedJobId)
+        {
+            return View(_saveJobService.GetSavedJobDetail(savedJobId));
+        }
+
+        [HttpPost, ActionName("DeleteSavedJob")]
+        public IActionResult DeleteSaved(int savedJobId)
+        {
+            _saveJobService.DeleteSavedJob(savedJobId);
+            TempData["ResultOk"] = "Saved Job Deleted Successfully !";
+            return RedirectToAction("Index", "SaveJob");
+        }
     }
 }
