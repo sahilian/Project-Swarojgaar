@@ -99,14 +99,16 @@
     </div>
 </div>
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
-{
-    LiElementClasses = new string[] { "page-item" },
-    PageClasses = new string[] { "page-link" },
-    ContainerDivClasses = new string[] { "pagination" }
-})
+<div style="margin-left: 12px">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+    {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" },
+        ContainerDivClasses = new string[] { "pagination" }
+    })
 
 
+</div>
 
 @* <nav aria-label="Page navigation example" style="margin-left: 12px">
     <ul class="pagination">
