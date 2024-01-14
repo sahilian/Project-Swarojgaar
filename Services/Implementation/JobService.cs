@@ -19,7 +19,7 @@ public class JobService : IJobService
     {
         try
         {
-            List<Job> jobs = _jobRepository.GetAll();
+            IOrderedEnumerable<Job> jobs = _jobRepository.GetAll().OrderByDescending(job => job.JobId);
             List<GetAllJobsVM> getAllJobs = _mapper.Map<List<GetAllJobsVM>>(jobs);
             return getAllJobs;
         }
