@@ -2,6 +2,7 @@
 using Swarojgaar.Models;
 using Swarojgaar.Services.Interface;
 using System.Diagnostics;
+using Swarojgaar.ViewModel.JobVM;
 
 namespace Swarojgaar.Controllers
 {
@@ -17,9 +18,19 @@ namespace Swarojgaar.Controllers
             _jobService = jobService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string search_item = "")
         {
-            return View(_jobService.GetAllJobs());
+            List<GetAllJobsVM> jobs = _jobService.GetAllJobs();
+            if (string.IsNullOrEmpty(search_item))
+            {
+                return View(jobs);
+            }
+            else
+            {
+                search_item = search_item.ToLower();
+                List<GetAllJobsVM> getAllJobs = jobs.Where(x => x.Title.ToLower().Contains(search_item) || search_item == null).ToList()!;
+                return View(getAllJobs);
+            }
         }
 
         public IActionResult Privacy()
