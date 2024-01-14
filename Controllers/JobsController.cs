@@ -20,7 +20,7 @@ namespace Swarojgaar.Controllers
         // GET: Jobs
         public IActionResult Index(int? page)
         {
-            return View(_jobService.GetAllJobs().ToPagedList(page ?? 3, 5));
+            return View(_jobService.GetAllJobs().ToPagedList(page ?? 1, 5));
         }
 
 
