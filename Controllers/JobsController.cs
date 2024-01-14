@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobVM;
+using X.PagedList;
+
 
 namespace Swarojgaar.Controllers
 {
@@ -16,10 +18,11 @@ namespace Swarojgaar.Controllers
         }
 
         // GET: Jobs
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            return View(_jobService.GetAllJobs());
+            return View(_jobService.GetAllJobs().ToPagedList(page ?? 3, 5));
         }
+
 
         // GET: Jobs/Details/5
         public IActionResult Details(int id)
