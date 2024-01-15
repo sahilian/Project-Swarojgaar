@@ -20,8 +20,20 @@ namespace Swarojgaar.Controllers
         // GET: Jobs
         public IActionResult Index(int? page)
         {
-            return View(_jobService.GetAllJobs().ToPagedList(page ?? 1, 6));
+            try
+            {
+                var jobs = _jobService.GetAllJobs().ToPagedList(page ?? 1, 6);
+
+                return View("Index", jobs);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal Server Error");
+            }
         }
+
+
 
 
         // GET: Jobs/Details/5

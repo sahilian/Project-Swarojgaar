@@ -2,17 +2,15 @@
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
+@model X.PagedList.IPagedList<Swarojgaar.ViewModel.JobVM.GetAllJobsVM>
 
-@model IPagedList<Swarojgaar.ViewModel.JobVM.GetAllJobsVM>
 @{
     ViewData["Title"] = "GetAll";
 }
 
 <h1 style="margin-left: 12px">List of Jobs</h1>
-
 @if (TempData["ResultOk"] != null)
 {
-    <script src="/lib/jquery/dist/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         toastr.success('@TempData["ResultOk"]');
@@ -22,100 +20,38 @@
     <a asp-action="Create" style="margin-left: 12px" class="btn btn-success"><i class="bi bi-file-plus-fill"></i>Add New Job</a>
 </p>
 
-@*<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Description
-            </th>
-            <th>
-                Salary
-            </th>
-            <th>
-                Expiry Date
-            </th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Salary)
-                </td>
-                <td>
-                    @item.ExpiryDate.ToString("yyyy/MM/dd")
-                </td>
-                <div role="group" class="w-60 btn-group">
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.JobId" class="btn btn-primary">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.JobId" class="btn btn-info">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.JobId" class="btn btn-danger">Delete</a>
-                </td>
-                </div>
-            </tr>
-        }
-    </tbody>
-</table>*@
+
 <div class="box">
     <div class="container">
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
-
-                    <div class="box-part text-center">
-
-                        <h1>🔥</h1>
-
-                        <div class="title">
-                            <h4> @Html.DisplayFor(modelItem => item.Title)</h4>
-                        </div>
-
-                        <div class="text">
-                            <span>@Html.DisplayFor(modelItem => item.Description)</span>
-                        </div>
-
-                        <div role="group" class="w-60 btn-group">
-                            <a asp-action="Edit" asp-route-id="@item.JobId" class="btn btn-primary mx-1 rounded">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.JobId" class="btn btn-info mx-1 rounded">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.JobId" class="btn btn-danger mx-1 rounded">Delete</a>
-                        </div>
-
-                    </div>
-                </div>
-            }
+        <div class="row" id="jobItemsContainer">
+            @await Html.PartialAsync("_JobItemPartial", Model)
+            <div style="margin-left: 12px">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" },
+                    ContainerDivClasses = new string[] { "pagination" }
+                })
+            </div>
         </div>
     </div>
 </div>
+<script src="lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        console.log('Script started!');
 
-<div style="margin-left: 12px">
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
-    {
-        LiElementClasses = new string[] { "page-item" },
-        PageClasses = new string[] { "page-link" },
-        ContainerDivClasses = new string[] { "pagination" }
-    })
-
-
-</div>
-
-@* <nav aria-label="Page navigation example" style="margin-left: 12px">
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</nav> *@
+        $(document).on('click', '#jobItemsContainer .pagination a', function (e) {
+            e.preventDefault();
+            console.log('AJAX invoked!');
+            var url = $(this).attr('href');
+            $.get(url, function (response) {
+                $('#jobItemsContainer').html(response);
+            })
+                .fail(function (xhr, status, error) {
+                    console.error('AJAX failed:', status, error);
+                    console.log('Response:', xhr.responseText);
+                });
+        });
+    });
+</script>

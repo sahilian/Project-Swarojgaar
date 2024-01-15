@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model X.PagedList.IPagedList<Swarojgaar.ViewModel.JobVM.GetAllJobsVM>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div class="box-part text-center">
+                <h1>🔥</h1>
+                <div class="title">
+                    <h4>@Html.DisplayFor(modelItem => item.Title)</h4>
+                </div>
+                <div class="text">
+                    <span>@Html.DisplayFor(modelItem => item.Description)</span>
+                </div>
+                <div role="group" class="w-60 btn-group">
+                    <a asp-action="Edit" asp-route-id="@item.JobId" class="btn btn-primary mx-1 rounded">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.JobId" class="btn btn-info mx-1 rounded">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.JobId" class="btn btn-danger mx-1 rounded">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
