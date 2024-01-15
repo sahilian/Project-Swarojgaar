@@ -25,28 +25,39 @@
     <div class="container">
         <div class="row" id="jobItemsContainer">
             @await Html.PartialAsync("_JobItemPartial", Model)
-            <div style="margin-left: 12px">
-                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
-                {
-                    LiElementClasses = new string[] { "page-item" },
-                    PageClasses = new string[] { "page-link" },
-                    ContainerDivClasses = new string[] { "pagination" }
-                })
-            </div>
+           
         </div>
     </div>
 </div>
+<div id="PaginationButton" style="margin-left: 12px">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+    {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" },
+        ContainerDivClasses = new string[] { "pagination" }
+    })
+</div>
+<script src="lib/jquery/dist/jquery.min.js"></script>
 <script src="lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
         console.log('Script started!');
 
-        $(document).on('click', '#jobItemsContainer .pagination a', function (e) {
+        $(document).on('click', '#PaginationButton .pagination a', function (e) {
             e.preventDefault();
             console.log('AJAX invoked!');
             var url = $(this).attr('href');
             $.get(url, function (response) {
-                $('#jobItemsContainer').html(response);
+                $('#jobItemsContainer .row').html($(response).find('.row').html());
+                $('#PaginationButton .pagination').html($(response).find('.pagination').html());
+
+                var activePageNumber = $(response).find('.pagination .active a').text();
+                $('#PaginationButton .pagination .page-item').removeClass('active');
+                $('#PaginationButton .pagination .page-item').each(function () {
+                    if ($(this).find('a').text() === activePageNumber) {
+                        $(this).addClass('active');
+                    }
+                });
             })
                 .fail(function (xhr, status, error) {
                     console.error('AJAX failed:', status, error);
@@ -55,3 +66,4 @@
         });
     });
 </script>
+
