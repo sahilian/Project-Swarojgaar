@@ -25,20 +25,18 @@
     <div class="container">
         <div class="row" id="jobItemsContainer">
             @await Html.PartialAsync("_JobItemPartial", Model)
-           
         </div>
     </div>
 </div>
 <div id="PaginationButton" style="margin-left: 12px">
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
-    {
-        LiElementClasses = new string[] { "page-item" },
-        PageClasses = new string[] { "page-link" },
-        ContainerDivClasses = new string[] { "pagination" }
-    })
+{
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" },
+    ContainerDivClasses = new string[] { "pagination" }
+})
 </div>
-<script src="lib/jquery/dist/jquery.min.js"></script>
-<script src="lib/jquery/dist/jquery.min.js"></script>
+
 <script>
     $(document).ready(function () {
         console.log('Script started!');
