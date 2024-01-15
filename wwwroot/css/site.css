@@ -18,7 +18,7 @@ body {
 }
 
 body {
-    background: #eee;
+    background: #eee !important;
 }
 
 span {

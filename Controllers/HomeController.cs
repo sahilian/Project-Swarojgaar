@@ -18,19 +18,25 @@ namespace Swarojgaar.Controllers
             _jobService = jobService;
         }
 
-        public IActionResult Index(string search_item = "")
+        [HttpGet]
+
+        public IActionResult SearchJobs(string search_item)
         {
-            List<GetAllJobsVM> jobs = _jobService.GetAllJobs();
+            var allJobs = _jobService.GetAllJobs();
+
             if (string.IsNullOrEmpty(search_item))
-            {
-                return View(jobs);
-            }
-            else
-            {
-                search_item = search_item.ToLower();
-                List<GetAllJobsVM> getAllJobs = jobs.Where(x => x.Title.ToLower().Contains(search_item) || search_item == null).ToList()!;
-                return View(getAllJobs);
-            }
+                return PartialView("_JobListPartial", allJobs);
+
+            var results = allJobs.Where(j =>
+                j.Title.ToLower().Contains(search_item)).ToList();
+
+            return PartialView("_JobListPartial", results);
+        }
+
+        public IActionResult Index()
+        {
+            var allJobs = _jobService.GetAllJobs();
+            return View(allJobs);
         }
 
         public IActionResult Privacy()
