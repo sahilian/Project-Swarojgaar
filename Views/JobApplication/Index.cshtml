@@ -18,38 +18,43 @@
 }
 
 <h2>Your Applied Jobs</h2>
-
 @if (userAppliedJobs.Any())
 {
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover" style="background-color: white">
         <thead>
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Description
-            </th>
-            <th>
-                Salary
-            </th>
-        </tr>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Salary
+                </th>
+                <th>
+                    Status
+                </th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var item in userAppliedJobs)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Salary)
-                </td>
-            </tr>
-        }
+            @foreach (var item in userAppliedJobs)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Salary)
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-warning">Pending</button>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }

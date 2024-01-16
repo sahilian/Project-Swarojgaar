@@ -4,29 +4,27 @@
 
 @if (Model.Count > 0)
 {
-    <table class="table table-hover">
+    <table class="table table-bordered table-hover" style="background-color: white">
         <thead>
-        <tr>
-            <th>Job Application ID</th>
-            <th>User ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Location</th>
-            <!-- Add other columns as needed -->
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var jobApplicant in Model)
-        {
             <tr>
-                <td>@jobApplicant.JobApplicationId</td>
-                <td>@jobApplicant.UserId</td>
-                <td>@jobApplicant.FirstName</td>
-                <td>@jobApplicant.LastName</td>
-                <td>@jobApplicant.Location</td>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Location</th>
+                <th>Status</th>
                 <!-- Add other columns as needed -->
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var jobApplicant in Model)
+            {
+                <tr>
+                    <td>@jobApplicant.FirstName</td>
+                    <td>@jobApplicant.LastName</td>
+                    <td>@jobApplicant.Location</td>
+                    <td> <button type="button" class="btn btn-warning">Pending</button> </td>
+                    <!-- Add other columns as needed -->
+                </tr>
+            }
         </tbody>
     </table>
 }
