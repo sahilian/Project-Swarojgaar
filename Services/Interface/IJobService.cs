@@ -6,7 +6,7 @@ public interface IJobService
 {
     List<GetAllJobsVM> GetAllJobs();
     DetailsJobVM GetJobDetails(int id);
-    bool CreateJob(CreateJobVM createViewModel);
+    public bool CreateJob(CreateJobVM createViewModel, string userId);
     bool EditJob(EditJobVM  editViewModel);
     bool DeleteJob(int id);
     EditJobVM EditJob(int id);

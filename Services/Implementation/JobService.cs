@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Interface;
@@ -10,10 +12,13 @@ public class JobService : IJobService
 {
     private readonly IGenericRepository<Job> _jobRepository;
     private readonly IMapper _mapper;
-    public JobService(IGenericRepository<Job> jobRepository, IMapper mapper)
+    private readonly UserManager<IdentityUser> _userManager;
+
+    public JobService(IGenericRepository<Job> jobRepository, IMapper mapper, UserManager<IdentityUser> userManager)
     {
         _jobRepository = jobRepository;
         _mapper = mapper;
+        _userManager = userManager;
     }
     public List<GetAllJobsVM> GetAllJobs()
     {
@@ -29,7 +34,6 @@ public class JobService : IJobService
             throw;
         }
     }
-
     public DetailsJobVM GetJobDetails(int id)
     {
         try
@@ -45,7 +49,7 @@ public class JobService : IJobService
         }
     }
 
-    public bool CreateJob(CreateJobVM createViewModel)
+    public bool CreateJob(CreateJobVM createViewModel, string userId)
     {
 
         try

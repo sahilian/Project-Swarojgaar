@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swarojgaar.Models;
+using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Interface;
+using Swarojgaar.ViewModel.JobApplicationVM;
 using Swarojgaar.ViewModel.JobVM;
 using X.PagedList;
 
@@ -10,11 +16,21 @@ namespace Swarojgaar.Controllers
     //[Authorize(Roles = "Admin, Job_Provider")]
     public class JobsController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IJobService _jobService;
+        private readonly IGenericRepository<Job> _genericRepository;
 
-        public JobsController(IJobService jobService)
+
+        public JobsController(
+            IJobService jobService, 
+            UserManager<IdentityUser> userManager, 
+            IGenericRepository<Job> genericRepository
+            )
         {
+
             _jobService = jobService;
+            _userManager = userManager;
+            _genericRepository = genericRepository;
         }
 
         // GET: Jobs
@@ -54,7 +70,9 @@ namespace Swarojgaar.Controllers
         {
             try
             {
-                _jobService.CreateJob(createViewModel);
+                var userId = _userManager.GetUserId(User);
+                createViewModel.UserId = userId;
+                _jobService.CreateJob(createViewModel, userId);
                 TempData["ResultOk"] = "Data Created Successfully !";
                 return RedirectToAction("Index", "Jobs");
             }

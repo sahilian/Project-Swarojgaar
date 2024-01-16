@@ -42,7 +42,6 @@ namespace Swarojgaar.Services.Implementation
             try
             {
                 JobApplication jobApplication = _mapper.Map<JobApplication>(createJobApplication);
-                //jobApplication.UserId = userId;
                 return _jobApplicationRepository.Create(jobApplication);
             }
             catch (Exception e)

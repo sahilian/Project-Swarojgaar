@@ -6,6 +6,8 @@ using Swarojgaar.Repository.Implementation;
 using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Implementation;
 using Swarojgaar.Services.Interface;
+using Swarojgaar.Migrations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionStrings = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -29,7 +31,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.Re
 
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
