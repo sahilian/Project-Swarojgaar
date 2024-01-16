@@ -8,7 +8,9 @@ using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobApplicationVM;
 using Swarojgaar.ViewModel.JobVM;
+using System.Net.NetworkInformation;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Swarojgaar.Controllers
@@ -32,8 +34,8 @@ namespace Swarojgaar.Controllers
             _userManager = userManager;
             _genericRepository = genericRepository;
         }
-
-        // GET: Jobs
+        /*
+        //GET: Jobs
         public IActionResult Index(int? page)
         {
             try
@@ -47,10 +49,48 @@ namespace Swarojgaar.Controllers
                 Console.WriteLine(ex.Message);
                 return StatusCode(500, "Internal Server Error");
             }
+        }*/
+        public IActionResult Index(int? page)
+        {
+            try
+            {
+                bool isAdmin = User.IsInRole("Admin");
+                if (isAdmin)
+                {
+                    var jobs = _jobService.GetAllJobs().ToPagedList(page ?? 1, 6);
+                    return View("Index", jobs);
+
+                }
+                else
+                {
+                    string currentUserId = _userManager.GetUserId(User);
+                    var jobs = _jobService.GetJobsByUserId(currentUserId).ToPagedList(page ?? 1, 6);
+                    return View("Index", jobs);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
+        public async Task<IActionResult> JobApplicants(int jobId)
+        {
+            try
+            {
+                var jobApplicants = await _jobService.GetJobApplicants(jobId);
 
-
+                // Pass the list of job applicants to the view
+                return View("JobApplicants", jobApplicants);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
 
         // GET: Jobs/Details/5
         public IActionResult Details(int id)

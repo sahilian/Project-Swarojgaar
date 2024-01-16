@@ -33,7 +33,7 @@
                     {
                         var user = await UserManager.GetUserAsync(User);
                         var roles = await UserManager.GetRolesAsync(user);
-                        @if (user.UserName == "admin@gmail.com")
+                            @if (roles.Contains("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
@@ -46,7 +46,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
                             </li>
                         }
-
+                           
                         @if (roles.Contains("Job_Seeker"))
                         {
                             <li class="nav-item">

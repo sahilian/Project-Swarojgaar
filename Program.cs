@@ -29,7 +29,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.Re
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
