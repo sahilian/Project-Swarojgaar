@@ -70,6 +70,7 @@ using Swarojgaar.ViewModel.JobApplicationVM;
 
 namespace Swarojgaar.Controllers
 {
+    [Authorize(Roles = "Job_Seeker")]
     public class JobApplicationController : Controller
     {
         private readonly IJobApplicationService _jobApplicationService;
@@ -95,6 +96,7 @@ namespace Swarojgaar.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Job_Seeker")]
         public IActionResult Index()
         {
             return View(_jobApplicationService.GetAllJobApplications());
@@ -107,7 +109,7 @@ namespace Swarojgaar.Controllers
             return View(_jobService.GetJobDetails(id));
         }
 
-        [Authorize]
+        [Authorize(Roles = "Job_Seeker")]
         [HttpPost]
         public IActionResult CreateJobApplication(CreateJobApplicationVM createJobApplication)
         {
