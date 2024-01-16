@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Swarojgaar.Migrations
 {
-    public partial class initial : Migration
+    public partial class initialcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,22 +50,6 @@ namespace Swarojgaar.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Jobs",
-                columns: table => new
-                {
-                    JobId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Salary = table.Column<double>(type: "float", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jobs", x => x.JobId);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,12 +159,36 @@ namespace Swarojgaar.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Jobs",
+                columns: table => new
+                {
+                    JobId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salary = table.Column<double>(type: "float", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Jobs", x => x.JobId);
+                    table.ForeignKey(
+                        name: "FK_Jobs_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobApplications",
                 columns: table => new
                 {
                     JobApplicationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     JobId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salary = table.Column<double>(type: "float", nullable: false),
@@ -190,12 +198,68 @@ namespace Swarojgaar.Migrations
                 {
                     table.PrimaryKey("PK_JobApplications", x => x.JobApplicationId);
                     table.ForeignKey(
+                        name: "FK_JobApplications_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_JobApplications_Jobs_JobId",
                         column: x => x.JobId,
                         principalTable: "Jobs",
                         principalColumn: "JobId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "SavedJobs",
+                columns: table => new
+                {
+                    SavedJobId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    JobId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salary = table.Column<double>(type: "float", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavedJobs", x => x.SavedJobId);
+                    table.ForeignKey(
+                        name: "FK_SavedJobs_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SavedJobs_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
+                        principalColumn: "JobId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "64a99865-2144-4979-942e-71a8540d5061", "8cd07b0f-0881-4e16-be19-ca683a36f293", "Job_Provider", "JOB_PROVIDER" },
+                    { "65c00570-b09f-4c8b-a412-eea238c829b7", "5548cdf1-605b-4bda-8bd7-c2e5a3d57738", "Admin", "ADMIN" },
+                    { "d959fac3-736d-437f-b467-00bce9b64a65", "5b45459b-26cf-4ca4-b22f-7946f2e220fe", "Job_Seeker", "JOB_SEEKER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "5f72c52c-84ad-4656-b941-66324a798316", 0, "7cbc04af-041c-40f1-96f2-d29091379972", "IdentityUser", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEFWLSgdcOkhjqHn3BLjg/5K4Ix9ySV9BzWPTgw2Q14BicR/Sb2MHoQ/EJfr9q56g8w==", null, false, "UniqueSecurityStamp", false, "admin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "65c00570-b09f-4c8b-a412-eea238c829b7", "5f72c52c-84ad-4656-b941-66324a798316" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -240,6 +304,26 @@ namespace Swarojgaar.Migrations
                 name: "IX_JobApplications_JobId",
                 table: "JobApplications",
                 column: "JobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobApplications_UserId",
+                table: "JobApplications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_UserId",
+                table: "Jobs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SavedJobs_JobId",
+                table: "SavedJobs",
+                column: "JobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SavedJobs_UserId",
+                table: "SavedJobs",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -263,13 +347,16 @@ namespace Swarojgaar.Migrations
                 name: "JobApplications");
 
             migrationBuilder.DropTable(
+                name: "SavedJobs");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Jobs");
 
             migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "AspNetUsers");
         }
     }
 }

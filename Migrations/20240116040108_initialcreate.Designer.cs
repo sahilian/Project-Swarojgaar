@@ -12,8 +12,8 @@ using Swarojgaar.Data;
 namespace Swarojgaar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240109054401_addedsavedjobs")]
-    partial class addedsavedjobs
+    [Migration("20240116040108_initialcreate")]
+    partial class initialcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,29 @@ namespace Swarojgaar.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "65c00570-b09f-4c8b-a412-eea238c829b7",
+                            ConcurrencyStamp = "5548cdf1-605b-4bda-8bd7-c2e5a3d57738",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "64a99865-2144-4979-942e-71a8540d5061",
+                            ConcurrencyStamp = "8cd07b0f-0881-4e16-be19-ca683a36f293",
+                            Name = "Job_Provider",
+                            NormalizedName = "JOB_PROVIDER"
+                        },
+                        new
+                        {
+                            Id = "d959fac3-736d-437f-b467-00bce9b64a65",
+                            ConcurrencyStamp = "5b45459b-26cf-4ca4-b22f-7946f2e220fe",
+                            Name = "Job_Seeker",
+                            NormalizedName = "JOB_SEEKER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -86,6 +109,10 @@ namespace Swarojgaar.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -139,6 +166,26 @@ namespace Swarojgaar.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "5f72c52c-84ad-4656-b941-66324a798316",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7cbc04af-041c-40f1-96f2-d29091379972",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFWLSgdcOkhjqHn3BLjg/5K4Ix9ySV9BzWPTgw2Q14BicR/Sb2MHoQ/EJfr9q56g8w==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "UniqueSecurityStamp",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -203,6 +250,13 @@ namespace Swarojgaar.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "5f72c52c-84ad-4656-b941-66324a798316",
+                            RoleId = "65c00570-b09f-4c8b-a412-eea238c829b7"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -248,7 +302,13 @@ namespace Swarojgaar.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("JobId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Jobs");
                 });
@@ -289,6 +349,63 @@ namespace Swarojgaar.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("JobApplications");
+                });
+
+            modelBuilder.Entity("Swarojgaar.Models.SavedJob", b =>
+                {
+                    b.Property<int>("SavedJobId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedJobId"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Salary")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SavedJobId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SavedJobs");
+                });
+
+            modelBuilder.Entity("Swarojgaar.Models.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -342,6 +459,17 @@ namespace Swarojgaar.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Swarojgaar.Models.Job", b =>
+                {
+                    b.HasOne("Swarojgaar.Models.User", "User")
+                        .WithMany("Jobs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Swarojgaar.Models.JobApplication", b =>
                 {
                     b.HasOne("Swarojgaar.Models.Job", "Job")
@@ -353,12 +481,36 @@ namespace Swarojgaar.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Job");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Swarojgaar.Models.SavedJob", b =>
+                {
+                    b.HasOne("Swarojgaar.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Swarojgaar.Models.User", b =>
+                {
+                    b.Navigation("Jobs");
                 });
 #pragma warning restore 612, 618
         }

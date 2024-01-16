@@ -1,13 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Data;
 using Microsoft.AspNetCore.Identity;
-using Swarojgaar.Migrations;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Implementation;
 using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Implementation;
 using Swarojgaar.Services.Interface;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionStrings = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -54,6 +52,5 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-IdentitySeedData.EnsurePopulated(app);
 
 app.Run();

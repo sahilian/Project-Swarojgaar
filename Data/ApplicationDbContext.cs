@@ -10,32 +10,61 @@ namespace Swarojgaar.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+
         public DbSet<Job> Jobs { get; set; }
-        //public DbSet<User> Users { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<SavedJob> SavedJobs { get; set; }
-        //public DbSet<Role> Roles { get; set; }
-        //public DbSet<UserRole> UserRoles { get; set; }
-        //public DbSet<Job> Jobs { get; set; }
-        //public DbSet<Application> Applications { get; set; }
-        //public DbSet<Resume> Resumes { get; set; }
-        //public DbSet<Shortlisted> Shortlisted { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Seed Roles
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                    { Id = "65c00570-b09f-4c8b-a412-eea238c829b7", Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole
+                {
+                    Id = "64a99865-2144-4979-942e-71a8540d5061", Name = "Job_Provider", NormalizedName = "JOB_PROVIDER"
+                },
+                new IdentityRole
+                    { Id = "d959fac3-736d-437f-b467-00bce9b64a65", Name = "Job_Seeker", NormalizedName = "JOB_SEEKER" }
+            );
+            var adminId = Guid.NewGuid().ToString();
+            // Seed Admin User
+            var adminUser = new IdentityUser
+            {
+                Id = adminId, // Generate a unique ID for the admin user
+                UserName = "admin@gmail.com",
+                NormalizedUserName = "ADMIN@GMAIL.COM",
+                Email = "admin@gmail.com",
+                NormalizedEmail = "ADMIN@GMAIL.COM",
+                EmailConfirmed = true,
+                SecurityStamp = "UniqueSecurityStamp"
+            };
+
+            var passwordHasher = new PasswordHasher<IdentityUser>();
+            adminUser.PasswordHash = passwordHasher.HashPassword(null, "Secret123$");
+
+            modelBuilder.Entity<IdentityUser>().HasData(adminUser);
+
+            // Assign Admin Role to Admin User
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> { UserId = adminUser.Id, RoleId = "65c00570-b09f-4c8b-a412-eea238c829b7" }
+            );
+
             modelBuilder.Entity<JobApplication>()
                 .HasOne(ja => ja.User)
                 .WithMany()
-                .HasForeignKey(ja => ja.UserId);
+                .HasForeignKey(ja => ja.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // Add this line to avoid cascading delete
 
             modelBuilder.Entity<SavedJob>()
                 .HasOne(sj => sj.User)
                 .WithMany()
-                .HasForeignKey(sj => sj.UserId);
-
-            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
-
+                .HasForeignKey(sj => sj.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // Add this line to avoid cascading delete
         }
-
     }
 }
+

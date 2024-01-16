@@ -40,7 +40,7 @@
                             </li>
                         }
 
-                        @if (user.UserName == "admin@gmail.com" || roles.Contains("Job_Provider"))
+                        @if (roles.Contains("Admin") || roles.Contains("Job_Provider"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
