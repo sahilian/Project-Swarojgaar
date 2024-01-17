@@ -6,27 +6,39 @@
 
 <table class="table table-bordered table-hover" style="background-color: white">
     <thead>
-    <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Roles</th>
-        <!-- Add other columns as needed -->
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var user in Model)
-    {
         <tr>
-            <td>@user.UserName</td>
-            <td>@user.Email</td>
-            <td>
-                @foreach (var role in await _userManager.GetRolesAsync(user))
-                {
-                    <span class="badge badge-primary">@role</span>
-                }
-            </td>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
             <!-- Add other columns as needed -->
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @foreach (var role in await _userManager.GetRolesAsync(user))
+                    {
+                        if (role == "Admin")
+                        {
+                            <button type="button" class="btn btn-danger" style="width: 115px">@role</button>
+                        }
+
+                        if (role == "Job_Provider")
+                        {
+                            <button type="button" class="btn btn-primary" style="width: 115px">@role</button>
+                        }
+                        if (role == "Job_Seeker")
+                        {
+                            <button type="button" class="btn btn-success" style="width: 115px">@role</button>
+                        }
+                    }
+                </td>
+                <!-- Add other columns as needed -->
+            </tr>
+        }
     </tbody>
 </table>
