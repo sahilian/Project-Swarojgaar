@@ -2,7 +2,11 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
 @inject UserManager<IdentityUser> _userManager
-<h1>List of all users</h1>
+
+<div class="alert alert-success" style="text-align: center">
+    <h2>List of all registered users:</h2>
+</div>
+
 
 <table class="table table-bordered table-hover" style="background-color: white">
     <thead>
