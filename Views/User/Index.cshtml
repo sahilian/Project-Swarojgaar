@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
 @inject UserManager<IdentityUser> _userManager
 <h1>List of all users</h1>
-
 
 <table class="table table-bordered table-hover" style="background-color: white">
     <thead>
@@ -10,7 +10,7 @@
             <th>Username</th>
             <th>Email</th>
             <th>Roles</th>
-            <!-- Add other columns as needed -->
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -22,23 +22,43 @@
                 <td>
                     @foreach (var role in await _userManager.GetRolesAsync(user))
                     {
-                        if (role == "Admin")
-                        {
-                            <button type="button" class="btn btn-danger" style="width: 115px">@role</button>
-                        }
-
-                        if (role == "Job_Provider")
-                        {
-                            <button type="button" class="btn btn-primary" style="width: 115px">@role</button>
-                        }
-                        if (role == "Job_Seeker")
-                        {
-                            <button type="button" class="btn btn-success" style="width: 115px">@role</button>
-                        }
+                        // Display roles as buttons
+                        <button type="button" class="@GetButtonClass(role)" style="width: 115px">@role</button>
                     }
                 </td>
-                <!-- Add other columns as needed -->
+                <td>
+                    @if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary" style="width: 150px">Details</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary">Details</a>
+                    }
+                    @if (!await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a>
+                    }
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+@* Helper method to determine the button class based on the role *@
+@functions {
+    string GetButtonClass(string role)
+    {
+        switch (role)
+        {
+            case "Admin":
+                return "btn btn-outline-danger";
+            case "Job_Provider":
+                return "btn btn-outline-primary";
+            case "Job_Seeker":
+                return "btn btn-outline-success";
+            default:
+                return "btn btn-outline-secondary";
+        }
+    }
+}
