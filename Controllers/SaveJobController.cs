@@ -101,58 +101,58 @@ namespace Swarojgaar.Controllers
         }
 
         [HttpGet]
-            public IActionResult ApplyAndRemove(int savedJobId)
-            {
-                return View(_saveJobService.GetSavedJobDetail(savedJobId));
-            }
+        public IActionResult ApplyAndRemove(int savedJobId)
+        {
+            return View(_saveJobService.GetSavedJobDetail(savedJobId));
+        }
 
-            [HttpPost]
-            public IActionResult ApplyAndRemove(CreateJobApplicationVM createJobApplication, int savedJobId)
+        [HttpPost]
+        public IActionResult ApplyAndRemove(CreateJobApplicationVM createJobApplication, int savedJobId)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            try
             {
-                using var transaction = _context.Database.BeginTransaction();
-                try
+                var userId = _userManager.GetUserId(User);
+
+                var jobDetails = _savedJobRepository.GetBySavedJobId(savedJobId);
+
+
+                CreateJobApplicationVM createjob = new CreateJobApplicationVM()
                 {
-                    var userId = _userManager.GetUserId(User);
-
-                    var jobDetails = _savedJobRepository.GetBySavedJobId(savedJobId);
-
-
-                    CreateJobApplicationVM createjob = new CreateJobApplicationVM()
-                    {
-                        UserId = userId,
-                        Title = jobDetails.Title,
-                        Description = jobDetails.Description,
-                        Salary = jobDetails.Salary,
-                        ExpiryDate = jobDetails.ExpiryDate,
-                        JobId = jobDetails.JobId
-                    };
-                    _jobApplicationService.CreateJobApplication(createjob, userId);
-                    _saveJobService.ApplyAndRemove(savedJobId, userId);
-                    transaction.Commit();
-                    TempData["ResultOk"] = "Job Applied Successfully !";
-                    return RedirectToAction("Index", "JobApplication");
-                }
-                catch (Exception e)
-                {
-                    transaction.Rollback();
-                    Console.WriteLine(e);
-                    TempData["ResultError"] = "An error occurred while applying for the job.";
-                    return RedirectToAction("Index", "JobApplication");
-                }
+                    UserId = userId,
+                    Title = jobDetails.Title,
+                    Description = jobDetails.Description,
+                    Salary = jobDetails.Salary,
+                    ExpiryDate = jobDetails.ExpiryDate,
+                    JobId = jobDetails.JobId
+                };
+                _jobApplicationService.CreateJobApplication(createjob, userId);
+                _saveJobService.ApplyAndRemove(savedJobId, userId);
+                transaction.Commit();
+                TempData["ResultOk"] = "Job Applied Successfully !";
+                return RedirectToAction("Index", "JobApplication");
             }
-
-            [HttpGet]
-            public IActionResult DeleteSavedJob(int savedJobId)
+            catch (Exception e)
             {
-                return View(_saveJobService.GetSavedJobDetail(savedJobId));
-            }
-
-            [HttpPost, ActionName("DeleteSavedJob")]
-            public IActionResult DeleteSaved(int savedJobId)
-            {
-                _saveJobService.DeleteSavedJob(savedJobId);
-                TempData["ResultOk"] = "Saved Job Deleted Successfully !";
-                return RedirectToAction("Index", "SaveJob");
+                transaction.Rollback();
+                Console.WriteLine(e);
+                TempData["ResultError"] = "An error occurred while applying for the job.";
+                return RedirectToAction("Index", "JobApplication");
             }
         }
+
+        [HttpGet]
+        public IActionResult DeleteSavedJob(int savedJobId)
+        {
+            return View(_saveJobService.GetSavedJobDetail(savedJobId));
+        }
+
+        [HttpPost, ActionName("DeleteSavedJob")]
+        public IActionResult DeleteSaved(int savedJobId)
+        {
+            _saveJobService.DeleteSavedJob(savedJobId);
+            TempData["ResultOk"] = "Saved Job Deleted Successfully !";
+            return RedirectToAction("Index", "SaveJob");
+        }
     }
+}

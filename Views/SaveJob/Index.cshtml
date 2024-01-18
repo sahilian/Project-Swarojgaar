@@ -1,5 +1,7 @@
 ﻿@using System.Security.Claims
+@using Swarojgaar.Data
 @model List<Swarojgaar.ViewModel.SavedJobVM.GetAllSavedJobsVM>
+@inject ApplicationDbContext _dbContext
 
 @if (TempData["ResultOk"] != null)
 {
