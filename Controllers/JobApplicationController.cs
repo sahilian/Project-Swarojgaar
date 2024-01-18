@@ -62,6 +62,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Data;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
@@ -113,10 +114,12 @@ namespace Swarojgaar.Controllers
         [HttpPost]
         public IActionResult CreateJobApplication(CreateJobApplicationVM createJobApplication)
         {
+            
             try
             {
+                // Get the current user's ID
                 var userId = _userManager.GetUserId(User);
-
+                // Check if the user has already applied for the job
                 var jobDetails = _genericRepository.GetDetails(createJobApplication.JobId);
 
                 CreateJobApplicationVM createjob = new CreateJobApplicationVM()
@@ -129,12 +132,22 @@ namespace Swarojgaar.Controllers
                     JobId = jobDetails.JobId
                 };
 
+                var existingApplication = _context.JobApplications
+                    .FirstOrDefault(j => j.JobId == jobDetails.JobId && j.UserId == userId);
 
-                //_mapper.Map(jobDetails, createJobApplication);
+                if (existingApplication != null)
+                {
+                    // User has already applied, you can redirect or show a message
+                    TempData["ResultNotOk"] = "You have already applied for this job.";
+                    return RedirectToAction("Index", "JobApplication");
+                }
+                else
+                {
+                    _jobApplicationService.CreateJobApplication(createjob, userId);
+                    TempData["ResultOk"] = "Job Applied Successfully !";
+                    return RedirectToAction("Index", "JobApplication");
+                }
 
-                _jobApplicationService.CreateJobApplication(createjob, userId);
-                TempData["ResultOk"] = "Job Applied Successfully !";
-                return RedirectToAction("Index", "JobApplication");
             }
             catch (Exception e)
             {

@@ -9,6 +9,14 @@
         toastr.success('@TempData["ResultOk"]');
     </script>
 }
+@if (TempData["ResultNotOk"] != null)
+{
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error('@TempData["ResultNotOk"]');
+    </script>
+}
 
 @{
     // Get the current user's information
@@ -100,10 +108,8 @@
     function updateJobSeekerStatus(applicationId, status) {
         console.log('Updating status for applicationId:', applicationId, 'to status:', status);
 
-        // You need to implement AJAX call to update the status in the database
-        // Example using jQuery.ajax:
         $.ajax({
-            url: '/JobApplications/UpdateStatus', // Update the URL to match your controller and action
+            url: '/JobApplications/UpdateStatus',
             type: 'POST',
             data: { applicationId: applicationId, status: status },
             success: function (data) {
