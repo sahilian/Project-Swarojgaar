@@ -48,16 +48,32 @@
                 <div role="group" class="w-60 btn-group">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        var hasApplied = CheckIfUserApplied(item.JobId); // Implement this function to check if the user has applied
+                        // Implement this function to check if the user has applied
+                        var hasApplied = CheckIfUserApplied(item.JobId);
+                        var hasSaved = CheckIfUserSaved(item.JobId); // Implement this function to check if the user has saved
                         if (hasApplied)
                         {
                             <a class="btn btn-success mx-1 rounded" asp-controller="JobApplication" asp-action="Index"><img width="25" height="25" src="https://img.icons8.com/color/48/checked--v1.png" alt="checked--v1" /> Applied</a>
                         }
-                        else
+                        if (hasSaved)
+                        {
+                            <a class="btn btn-primary mx-1 rounded" asp-controller="SaveJob" asp-action="Index"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"
+                                                                                                                     style="fill:#000000;">
+                                <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" fill="#afcfff"></path><path d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" fill="#4691ff"></path></g></g>
+                            </svg> Saved</a>
+                            <a asp-controller="JobApplication" asp-action="CreateJobApplication" asp-route-id="@item.JobId" class="btn btn-success mx-1 rounded">Apply</a>
+
+                        }
+                        if(!hasApplied && !hasSaved)
                         {
                             <a asp-controller="SaveJob" asp-action="SaveJob" asp-route-id="@item.JobId" class="btn btn-primary mx-1 rounded">Save</a>
                             <a asp-controller="JobApplication" asp-action="CreateJobApplication" asp-route-id="@item.JobId" class="btn btn-success mx-1 rounded">Apply</a>
                         }
+                    }
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="SaveJob" asp-action="SaveJob" asp-route-id="@item.JobId" class="btn btn-primary mx-1 rounded">Save</a>
+                        <a asp-controller="JobApplication" asp-action="CreateJobApplication" asp-route-id="@item.JobId" class="btn btn-success mx-1 rounded">Apply</a>
                     }
                 </div>
             </div>
@@ -78,6 +94,22 @@
                 .FirstOrDefault(j => j.JobId == jobId && j.UserId == userId);
 
             return existingApplication != null;
+        }
+
+        return false;
+    }
+    // Implement this function to check if the user has saved for a specific job
+    bool CheckIfUserSaved(int jobId)
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Example: Check if there's an existing job application for the user and job
+            var existingSaved = _dbContext.SavedJobs
+                .FirstOrDefault(j => j.JobId == jobId && j.UserId == userId);
+
+            return existingSaved != null;
         }
 
         return false;
