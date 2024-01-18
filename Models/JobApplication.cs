@@ -31,5 +31,7 @@ namespace Swarojgaar.Models
         [Required(ErrorMessage = "ExpiryDate is required")]
         [DataType(DataType.Date)]
         public DateTime ExpiryDate { get; set; }
+
+        public int ApplicationStatus { get; set; }
     }
 }

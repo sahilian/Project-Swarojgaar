@@ -17,5 +17,7 @@ namespace Swarojgaar.ViewModel.JobApplicationVM
         public string UserId { get; set; }
         public double Salary { get; set; }
         public DateTime ExpiryDate { get; set; }
+        public int ApplicationStatus { get; set; }
+
     }
 }
