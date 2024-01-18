@@ -11,7 +11,7 @@ using Swarojgaar.ViewModel.JobVM;
 using System.Net.NetworkInformation;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
-
+using Swarojgaar.Data;
 
 namespace Swarojgaar.Controllers
 {
@@ -21,18 +21,18 @@ namespace Swarojgaar.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IJobService _jobService;
         private readonly IGenericRepository<Job> _genericRepository;
-
+        private readonly ApplicationDbContext _dbContext;
 
         public JobsController(
-            IJobService jobService, 
-            UserManager<IdentityUser> userManager, 
-            IGenericRepository<Job> genericRepository
-            )
+            IJobService jobService,
+            UserManager<IdentityUser> userManager,
+            IGenericRepository<Job> genericRepository,
+            ApplicationDbContext dbContext)
         {
-
             _jobService = jobService;
             _userManager = userManager;
             _genericRepository = genericRepository;
+            _dbContext = dbContext;
         }
         /*
         //GET: Jobs
@@ -91,6 +91,38 @@ namespace Swarojgaar.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        [HttpPost]
+        public IActionResult UpdateStatus(int applicationId, int status)
+        {
+            try
+            {
+                // Fetch the JobApplication from the database
+                var jobApplication = _dbContext.JobApplications.FirstOrDefault(j => j.JobApplicationId == applicationId);
+
+                if (jobApplication != null)
+                {
+                    // Update the ApplicationStatus
+                    jobApplication.ApplicationStatus = status;
+
+                    // Save changes to the database
+                    _dbContext.SaveChanges();
+
+                    return Json(new { success = true, message = "Status updated successfully" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Job application not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it accordingly
+                Console.WriteLine(ex.Message);
+                return Json(new { success = false, message = "Error updating status" });
+            }
+        }
+
 
         // GET: Jobs/Details/5
         public IActionResult Details(int id)

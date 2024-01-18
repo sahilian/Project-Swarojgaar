@@ -1,5 +1,5 @@
 ﻿@model List<Swarojgaar.ViewModel.JobVM.JobApplicantVM>
-
+@inject Swarojgaar.Data.ApplicationDbContext _dbContext
 <h2>Job Applicants</h2>
 
 @if (Model.Count > 0)
@@ -11,7 +11,7 @@
                 <th>Last Name</th>
                 <th>Location</th>
                 <th>Status</th>
-                <!-- Add other columns as needed -->
+                <th>Actions</th> <!-- New column for actions -->
             </tr>
         </thead>
         <tbody>
@@ -21,8 +21,11 @@
                     <td>@jobApplicant.FirstName</td>
                     <td>@jobApplicant.LastName</td>
                     <td>@jobApplicant.Location</td>
-                    <td> <button type="button" class="btn btn-warning">Pending</button> </td>
-                    <!-- Add other columns as needed -->
+                    <td id="status_@jobApplicant.JobApplicationId">@GetStatusText(jobApplicant.JobApplicationId)</td>
+                    <td>
+                        <button type="button" class="btn btn-success" onclick="updateStatus(@jobApplicant.JobApplicationId, 1)">Shortlist</button>
+                        <button type="button" class="btn btn-danger" onclick="updateStatus(@jobApplicant.JobApplicationId, 2)">Reject</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -32,3 +35,69 @@ else
 {
     <p>No job applicants found for this job.</p>
 }
+
+@functions
+{
+    // Helper function to get status text based on status code
+    string GetStatusText(int applicationId)
+    {
+        
+        var status = GetStatusFromDatabase(applicationId);
+
+        switch (status)
+        {
+            case 1:
+                return "Shortlisted";
+            case 2:
+                return "Rejected";
+            default:
+                return "Pending";
+        }
+    }
+
+    // Example method to get status from the database
+    int GetStatusFromDatabase(int applicationId)
+    {
+        var jobApplication = _dbContext.JobApplications.FirstOrDefault(j => j.JobApplicationId == applicationId);
+
+        return jobApplication?.ApplicationStatus ?? 0; // Default to Pending if not found
+    }
+}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    function updateStatus(applicationId, status) {
+        console.log('Updating status for applicationId:', applicationId, 'to status:', status);
+
+        // You need to implement AJAX call to update the status in the database
+        // Example using jQuery.ajax:
+        $.ajax({
+            url: '/Jobs/UpdateStatus', // Updated the URL to match the controller name
+            type: 'POST',
+            data: { applicationId: applicationId, status: status },
+            success: function (data) {
+                if (data.success) {
+                    // Update the UI dynamically
+                    var statusText = getStatusText(status);
+                    $('#status_' + applicationId).text(statusText);
+                } else {
+                    console.error('Error updating status:', data.message);
+                }
+            },
+            error: function (error) {
+                console.error('Error updating status:', error);
+            }
+        });
+    }
+
+    // Helper function to get status text based on status code
+    function getStatusText(status) {
+        switch (status) {
+            case 1:
+                return "Shortlisted";
+            case 2:
+                return "Rejected";
+            default:
+                return "Pending";
+        }
+    }
+</script>

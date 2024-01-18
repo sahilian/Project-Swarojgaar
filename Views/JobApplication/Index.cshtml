@@ -12,11 +12,24 @@
 
 @{
     // Get the current user's information
-    // var currentUser = Context.User;
     var userId = Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     var userAppliedJobs = Model.Where(x => x.UserId == userId).ToList();
 }
-
+@functions {
+    // Helper function to get status text based on status code
+    string GetStatusText(int status)
+    {
+        switch (status)
+        {
+            case 1:
+                return "Shortlisted";
+            case 2:
+                return "Rejected";
+            default:
+                return "Pending";
+        }
+    }
+}
 <h2>Your Applied Jobs</h2>
 @if (userAppliedJobs.Any())
 {
@@ -51,7 +64,21 @@
                         @Html.DisplayFor(modelItem => item.Salary)
                     </td>
                     <td>
-                        <button type="button" class="btn btn-warning">Pending</button>
+                        @if (GetStatusText(item.ApplicationStatus) == "Rejected")
+                        {
+                            <button type="button" class="btn btn-danger" id="status_@item.JobApplicationId" data-status="@item.ApplicationStatus">@GetStatusText(item.ApplicationStatus)</button>
+
+                        }
+                        @if (GetStatusText(item.ApplicationStatus) == "Shortlisted")
+                        {
+                            <button type="button" class="btn btn-success" id="status_@item.JobApplicationId" data-status="@item.ApplicationStatus">@GetStatusText(item.ApplicationStatus)</button>
+
+                        }
+                        @if (GetStatusText(item.ApplicationStatus) == "Pending")
+                        {
+                            <button type="button" class="btn btn-warning" id="status_@item.JobApplicationId" data-status="@item.ApplicationStatus">@GetStatusText(item.ApplicationStatus)</button>
+
+                        }
                     </td>
                 </tr>
             }
@@ -67,3 +94,50 @@
         <li class="page-item"><a class="page-link" href="#">Next</a></li>
     </ul>
 </nav>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    function updateJobSeekerStatus(applicationId, status) {
+        console.log('Updating status for applicationId:', applicationId, 'to status:', status);
+
+        // You need to implement AJAX call to update the status in the database
+        // Example using jQuery.ajax:
+        $.ajax({
+            url: '/JobApplications/UpdateStatus', // Update the URL to match your controller and action
+            type: 'POST',
+            data: { applicationId: applicationId, status: status },
+            success: function (data) {
+                if (data.success) {
+                    // Update the UI dynamically
+                    var statusText = getStatusText(status);
+                    $('#status_' + applicationId).text(statusText).data('status', status);
+                } else {
+                    console.error('Error updating status:', data.message);
+                }
+            },
+            error: function (error) {
+                console.error('Error updating status:', error);
+            }
+        });
+    }
+
+    function getStatusText(status) {
+        switch (status) {
+            case 1:
+                return "Shortlisted";
+            case 2:
+                return "Rejected";
+            default:
+                return "Pending";
+        }
+    }
+
+    // On document ready, update the button text based on data-status attribute
+    $(document).ready(function () {
+        $('button[data-status]').each(function () {
+            var status = $(this).data('status');
+            var statusText = getStatusText(status);
+            $(this).text(statusText);
+        });
+    });
+</script>
