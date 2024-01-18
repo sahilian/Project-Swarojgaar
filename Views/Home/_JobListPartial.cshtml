@@ -51,7 +51,7 @@
                         var hasApplied = CheckIfUserApplied(item.JobId); // Implement this function to check if the user has applied
                         if (hasApplied)
                         {
-                            <button type="button" class="btn btn-success mx-1 rounded"><img width="35" height="35" src="https://img.icons8.com/color/48/checked--v1.png" alt="checked--v1" /> Applied</button>
+                            <a class="btn btn-success mx-1 rounded" asp-controller="JobApplication" asp-action="Index"><img width="25" height="25" src="https://img.icons8.com/color/48/checked--v1.png" alt="checked--v1" /> Applied</a>
                         }
                         else
                         {
