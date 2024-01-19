@@ -23,7 +23,9 @@
 @{
     // Get the current user's information
     var userId = Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    var userSavedJobs = Model.Where(x => x.UserId == userId).ToList();
+    var userSavedJobs = Model.Where(x => x.UserId == userId)
+        .Where(savedJob => !_dbContext.JobApplications.Any(ja => ja.JobId == savedJob.JobId && ja.UserId == userId))
+        .ToList();
 }
 <h2>Your Saved Jobs</h2>
 

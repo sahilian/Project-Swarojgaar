@@ -57,11 +57,17 @@
                         }
                         if (hasSaved && !hasApplied)
                         {
+                            //the logic to remove the loophole of saved job when applied from homepage
+                            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                            var existingSaved = _dbContext.SavedJobs
+                                .FirstOrDefault(j => j.JobId == item.JobId && j.UserId == userId);
+
                             <a class="btn btn-primary mx-1 rounded" asp-controller="SaveJob" asp-action="Index"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0,0,256,256"
                                                                                                                      style="fill:#000000;">
                                 <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" fill="#afcfff"></path><path d="M34.586,14.586l-13.57,13.586l-5.602,-5.586l-2.828,2.828l8.434,8.414l16.395,-16.414z" fill="#4691ff"></path></g></g>
                             </svg> Saved</a>
-                            <a asp-controller="JobApplication" asp-action="CreateJobApplication" asp-route-id="@item.JobId" class="btn btn-success mx-1 rounded">Apply</a>
+                            <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-savedJobId="@existingSaved.SavedJobId" class="btn btn-success mx-1 rounded">Apply</a>
 
                         }
                         if(!hasApplied && !hasSaved)
