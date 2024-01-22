@@ -23,8 +23,8 @@
                     <td>@jobApplicant.Location</td>
                     <td id="status_@jobApplicant.JobApplicationId">@GetStatusText(jobApplicant.JobApplicationId)</td>
                     <td>
-                        <button type="button" class="btn btn-success" onclick="updateStatus(@jobApplicant.JobApplicationId, 1)">Shortlist</button>
-                        <button type="button" class="btn btn-danger" onclick="updateStatus(@jobApplicant.JobApplicationId, 2)">Reject</button>
+                        <button type="button" class="btn btn-success" asp-controller="Email" asp-action="Index" onclick="updateStatus(@jobApplicant.JobApplicationId, 1)">Shortlist</button>
+                        <button type="button" class="btn btn-danger" asp-controller="Email" asp-action="Index" onclick="updateStatus(@jobApplicant.JobApplicationId, 2)">Reject</button>
                     </td>
                 </tr>
             }

@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model X.PagedList.IPagedList<Swarojgaar.ViewModel.JobVM.GetAllJobsVM>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <div class="row">
     @foreach (var item in Model)
@@ -14,14 +15,14 @@
                     <span>@Html.DisplayFor(modelItem => item.Description)</span>
                 </div>
                 <div role="group" class="w-60 btn-group">
-                    <a asp-action="Edit" asp-route-id="@item.JobId" class="btn btn-primary mx-1 rounded">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.JobId" class="btn btn-info mx-1 rounded">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.JobId" class="btn btn-danger mx-1 rounded">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.JobId" class="btn btn-primary mx-1 rounded"><i class="far fa-edit"></i> Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.JobId" class="btn btn-info mx-1 rounded"><i class="far fa-question-circle"></i> Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.JobId" class="btn btn-danger mx-1 rounded"><i class="far fa-trash-alt"></i> Delete</a>
                 </div>
 
                 <div class="row">
                     <div class="col-12 text-center mt-2">
-                        <a asp-action="JobApplicants" asp-route-jobId="@item.JobId" class="btn btn-success rounded" style="width: 215px">View Job Applicants</a>
+                        <a asp-action="JobApplicants" asp-route-jobId="@item.JobId" class="btn btn-success rounded" style="width: 215px"><i class="fas fa-list-ul"></i> View Job Applicants</a>
                     </div>
                 </div>
             </div>

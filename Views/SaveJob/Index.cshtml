@@ -28,6 +28,7 @@
         .ToList();
 }
 <h2>Your Saved Jobs</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 @if (userSavedJobs.Any())
 {
@@ -64,8 +65,8 @@
                     </td>
                     <td>
                         <input type="hidden" name="savedJobId" value="@item.SavedJobId">
-                        <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-savedJobId="@item.SavedJobId" class="btn btn-success">Apply</a>
-                        <a asp-controller="SaveJob" asp-action="DeleteSavedJob" asp-route-savedJobId="@item.SavedJobId" class="btn btn-danger">Delete</a>
+                        <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-savedJobId="@item.SavedJobId" class="btn btn-success"><i class="far fa-check-circle"></i> Apply</a>
+                        <a asp-controller="SaveJob" asp-action="DeleteSavedJob" asp-route-savedJobId="@item.SavedJobId" class="btn btn-danger"><i class="far fa-trash-alt"></i> Delete</a>
                     </td>
                 </tr>
             }
