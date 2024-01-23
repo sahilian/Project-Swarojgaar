@@ -125,7 +125,7 @@ namespace Swarojgaar.Controllers
 
 
         // GET: Jobs/Details/5
-        public IActionResult Details(int id)
+        public IActionResult Details(string id)
         {
             return View(_jobService.GetJobDetails(id));
         }
@@ -176,7 +176,7 @@ namespace Swarojgaar.Controllers
         }
 
         // GET: Jobs/Delete/5
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string id)
         {
             return View(_jobService.GetJobDetails(id));
         }

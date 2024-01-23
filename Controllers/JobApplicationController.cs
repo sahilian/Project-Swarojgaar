@@ -105,7 +105,7 @@ namespace Swarojgaar.Controllers
 
         [Authorize(Roles = "Job_Seeker")]
         [HttpGet]
-        public IActionResult CreateJobApplication(int id)
+        public IActionResult CreateJobApplication(string id)
         {
             return View(_jobService.GetJobDetails(id));
         }

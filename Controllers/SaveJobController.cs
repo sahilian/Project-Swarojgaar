@@ -49,7 +49,7 @@ namespace Swarojgaar.Controllers
 
         [Authorize(Roles = "Job_Seeker")]
         [HttpGet]
-        public IActionResult SaveJob(int id)
+        public IActionResult SaveJob(string id)
         {
             return View(_jobService.GetJobDetails(id));
         }

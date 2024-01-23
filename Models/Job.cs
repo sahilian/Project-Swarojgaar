@@ -8,6 +8,8 @@ namespace Swarojgaar.Models
     {
         [Key]
         public int JobId { get; set; }
+        [NotMapped]
+        public string EncryptedJobId { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; }
         public User User { get; set; }

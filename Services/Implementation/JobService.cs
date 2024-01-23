@@ -5,6 +5,8 @@ using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.ViewModel.JobVM;
+using Microsoft.AspNetCore.DataProtection;
+using Swarojgaar.Security;
 
 namespace Swarojgaar.Services.Implementation;
 
@@ -14,19 +16,35 @@ public class JobService : IJobService
     private readonly IGenericRepository<JobApplication> _jobApplicationRepository;
     private readonly IMapper _mapper;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IDataProtector protector;
 
-    public JobService(IGenericRepository<Job> jobRepository, IMapper mapper, UserManager<IdentityUser> userManager, IGenericRepository<JobApplication> jobApplicationRepository)
+
+    public JobService(IGenericRepository<Job> jobRepository, 
+        IMapper mapper, 
+        UserManager<IdentityUser> userManager, 
+        IGenericRepository<JobApplication> jobApplicationRepository, 
+        IDataProtectionProvider dataProtectionProvider,
+        DataProtectionPurposeStrings dataProtectionPurposeStrings)
     {
         _jobRepository = jobRepository;
         _mapper = mapper;
         _userManager = userManager;
         _jobApplicationRepository = jobApplicationRepository;
+        protector = dataProtectionProvider
+            .CreateProtector(dataProtectionPurposeStrings.JobIdRouteValue);
     }
     public List<GetAllJobsVM> GetAllJobs()
     {
         try
         {
-            IOrderedEnumerable<Job> jobs = _jobRepository.GetAll().OrderByDescending(job => job.JobId);
+            IEnumerable<Job> jobs = _jobRepository.GetAll().OrderByDescending(job => job.JobId)
+                .Select(
+                    j =>
+                    {
+                        j.EncryptedJobId = protector.Protect(j.JobId.ToString());
+                        return j;
+                    }
+                );
             List<GetAllJobsVM> getAllJobs = _mapper.Map<List<GetAllJobsVM>>(jobs);
             return getAllJobs;
         }
@@ -94,11 +112,13 @@ public class JobService : IJobService
         }
     }
 
-    public DetailsJobVM GetJobDetails(int id)
+    public DetailsJobVM GetJobDetails(string id)
     {
         try
         {
-            Job job = _jobRepository.GetDetails(id);
+            string decryptedJobId = protector.Unprotect(id);
+            int decryptedIntJobId = Convert.ToInt32(decryptedJobId);
+            Job job = _jobRepository.GetDetails(decryptedIntJobId);
             DetailsJobVM details = _mapper.Map<DetailsJobVM>(job);
             return details;
         }

@@ -7,6 +7,7 @@ using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Implementation;
 using Swarojgaar.Services.Interface;
 using Swarojgaar.Migrations;
+using Swarojgaar.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
 builder.Services.AddScoped<ISavedJobRepository, SavedJobRepository>();
 builder.Services.AddScoped<ISaveJobService, SaveJobService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddSingleton<DataProtectionPurposeStrings>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -2,6 +2,8 @@
 using Swarojgaar.Models;
 using Swarojgaar.Services.Interface;
 using System.Diagnostics;
+using Microsoft.AspNetCore.DataProtection;
+using Swarojgaar.Security;
 using Swarojgaar.ViewModel.JobVM;
 
 namespace Swarojgaar.Controllers
@@ -10,12 +12,18 @@ namespace Swarojgaar.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IJobService _jobService;
+        private readonly IDataProtector protector;
 
-
-        public HomeController(ILogger<HomeController> logger, IJobService jobService)
+        public HomeController(ILogger<HomeController> logger, 
+            IJobService jobService, 
+            IDataProtectionProvider dataProtectionProvider, 
+            DataProtectionPurposeStrings dataProtectionPurposeStrings
+            )
         {
             _logger = logger;
             _jobService = jobService;
+            protector = dataProtectionProvider
+                .CreateProtector(dataProtectionPurposeStrings.JobIdRouteValue);
         }
 
         [HttpGet]
