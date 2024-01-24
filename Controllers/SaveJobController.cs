@@ -101,7 +101,7 @@ namespace Swarojgaar.Controllers
         }
 
         [HttpGet]
-        public IActionResult ApplyAndRemove(int savedJobId)
+        public IActionResult ApplyAndRemove(string savedJobId)
         {
             return View(_saveJobService.GetSavedJobDetail(savedJobId));
         }
@@ -127,7 +127,7 @@ namespace Swarojgaar.Controllers
                     JobId = jobDetails.JobId
                 };
                 _jobApplicationService.CreateJobApplication(createjob, userId);
-                _saveJobService.ApplyAndRemove(savedJobId, userId);
+                _saveJobService.ApplyAndRemove(savedJobId.ToString(), userId);
                 transaction.Commit();
                 TempData["ResultOk"] = "Job Applied Successfully !";
                 return RedirectToAction("Index", "JobApplication");
@@ -142,7 +142,7 @@ namespace Swarojgaar.Controllers
         }
 
         [HttpGet]
-        public IActionResult DeleteSavedJob(int savedJobId)
+        public IActionResult DeleteSavedJob(string savedJobId)
         {
             return View(_saveJobService.GetSavedJobDetail(savedJobId));
         }

@@ -12,18 +12,10 @@ namespace Swarojgaar.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IJobService _jobService;
-        private readonly IDataProtector protector;
-
-        public HomeController(ILogger<HomeController> logger, 
-            IJobService jobService, 
-            IDataProtectionProvider dataProtectionProvider, 
-            DataProtectionPurposeStrings dataProtectionPurposeStrings
-            )
+        public HomeController(ILogger<HomeController> logger, IJobService jobService)
         {
             _logger = logger;
             _jobService = jobService;
-            protector = dataProtectionProvider
-                .CreateProtector(dataProtectionPurposeStrings.JobIdRouteValue);
         }
 
         [HttpGet]

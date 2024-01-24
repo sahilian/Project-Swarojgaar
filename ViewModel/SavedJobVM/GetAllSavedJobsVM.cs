@@ -8,6 +8,8 @@ namespace Swarojgaar.ViewModel.SavedJobVM
     {
         [Key]
         public int SavedJobId { get; set; }
+        public string EncryptedSavedJobId { get; set; }
+
         [ForeignKey("Job")]
         public int JobId { get; set; }
         public Job Job { get; set; }

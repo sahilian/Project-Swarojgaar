@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Swarojgaar.Models;
 using Swarojgaar.Repository.Interface;
+using Swarojgaar.Security;
 using Swarojgaar.Services.Interface;
-using Swarojgaar.ViewModel.JobApplicationVM;
-using Swarojgaar.ViewModel.JobVM;
 using Swarojgaar.ViewModel.SavedJobVM;
 
 namespace Swarojgaar.Services.Implementation
@@ -15,25 +15,39 @@ namespace Swarojgaar.Services.Implementation
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ISavedJobRepository _savedJobRepository;
+        private readonly IDataProtector protector;
+
 
         public SaveJobService(
             IMapper mapper,
             UserManager<IdentityUser> userManager,
             IJobApplicationService jobApplicationService,
-            ISavedJobRepository savedJobRepository)
+            ISavedJobRepository savedJobRepository,
+            IDataProtectionProvider dataProtectionProvider,
+            DataProtectionPurposeStrings dataProtectionPurposeStrings
+            )
         {
             _savedJobRepository = savedJobRepository;
             _mapper = mapper;
             _userManager = userManager;
             _jobApplicationService = jobApplicationService;
             _savedJobRepository = savedJobRepository;
+            protector = dataProtectionProvider
+                .CreateProtector(dataProtectionPurposeStrings.SavedJobIdRouteValue);
         }
 
         public List<GetAllSavedJobsVM> GetAllSavedJobs()
         {
             try
             {
-                List<SavedJob> savedJobs = _savedJobRepository.GetAll();
+                IEnumerable<SavedJob> savedJobs = _savedJobRepository.GetAll().OrderByDescending(SavedJob => SavedJob.SavedJobId)
+                    .Select(
+                        sj =>
+                            {
+                                sj.EncryptedSavedJobId = protector.Protect(sj.SavedJobId.ToString());
+                                return sj;
+                            }
+                        );
                 List<GetAllSavedJobsVM> getAllSavedJobs = _mapper.Map<List<GetAllSavedJobsVM>>(savedJobs);
                 return getAllSavedJobs;
             }
@@ -44,11 +58,13 @@ namespace Swarojgaar.Services.Implementation
             }
         }
 
-        public SavedJobDetailVM GetSavedJobDetail(int id)
+        public SavedJobDetailVM GetSavedJobDetail(string id)
         {
             try
             {
-                SavedJob savedjobdetail = _savedJobRepository.GetBySavedJobId(id);
+                string decryptedSavedJobId = protector.Unprotect(id);
+                int decryptedIntSavedJobId = Convert.ToInt32(decryptedSavedJobId);
+                SavedJob savedjobdetail = _savedJobRepository.GetBySavedJobId(decryptedIntSavedJobId);
                 SavedJobDetailVM savedJobDetail = _mapper.Map<SavedJobDetailVM>(savedjobdetail);
                 return savedJobDetail;
             }
@@ -72,15 +88,17 @@ namespace Swarojgaar.Services.Implementation
                 throw;
             }
         }
-        public bool ApplyAndRemove(int savedJobId, string userId)
+        public bool ApplyAndRemove(string savedJobId, string userId)
         {
             try
             {
-                var savedJob = _savedJobRepository.GetBySavedJobId(savedJobId);
+                string decryptedSavedJobId = protector.Unprotect(savedJobId);
+                int decryptedIntSavedJobId = Convert.ToInt32(decryptedSavedJobId);
+                var savedJob = _savedJobRepository.GetBySavedJobId(decryptedIntSavedJobId);
 
                 if (savedJob != null)
                 {
-                    _savedJobRepository.Delete(savedJobId);
+                    _savedJobRepository.Delete(decryptedIntSavedJobId);
                     return true;
                 }
 

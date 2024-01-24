@@ -64,7 +64,7 @@
                                 .FirstOrDefault(j => j.JobId == item.JobId && j.UserId == userId);
 
                             <a class="btn btn-primary mx-1 rounded" asp-controller="SaveJob" asp-action="Index"><i class="fas fa-bookmark"></i> Saved</a>
-                            <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-savedJobId="@existingSaved.SavedJobId" class="btn btn-success mx-1 rounded"><i class="far fa-check-circle"></i> Apply</a>
+                            <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-SavedJobId="@existingSaved.EncryptedSavedJobId" class="btn btn-success mx-1 rounded"><i class="far fa-check-circle"></i> Apply</a>
 
                         }
                         if(!hasApplied && !hasSaved)
