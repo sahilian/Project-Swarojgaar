@@ -26,7 +26,7 @@ namespace Swarojgaar.Services.Implementation
         {
             try
             {
-                List<JobApplication> jobApplications = _jobApplicationRepository.GetAll();
+                IOrderedEnumerable<JobApplication> jobApplications = _jobApplicationRepository.GetAll().OrderByDescending(JobApplication => JobApplication.JobApplicationId);
                 List<GetAllJobApplicationsVM> getAllJobApplications =_mapper.Map<List<GetAllJobApplicationsVM>>(jobApplications);
                 return getAllJobApplications;
             }

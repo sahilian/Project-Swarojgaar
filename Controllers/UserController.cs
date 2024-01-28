@@ -17,11 +17,17 @@ namespace Swarojgaar.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var users = await _userManager.Users.ToListAsync();
+            //var users = await _userManager.Users.ToListAsync();
+            var users = _userManager.Users
+                .AsEnumerable() // Switch to in-memory processing
+                .OrderBy(u => string.Join(",", _userManager.GetRolesAsync(u).Result))
+                .ToList();
+
             return View(users);
         }
+
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(string id)
