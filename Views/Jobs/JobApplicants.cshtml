@@ -80,7 +80,7 @@ else
                     var statusText = getStatusText(status);
                     $('#status_' + applicationId).text(statusText);
                     // Redirect to the email page
-                    window.location.href = '/Email/Index';
+                    window.location.href = '/Email/SendMail';
                 } else {
                     console.error('Error updating status:', data.message);
                 }

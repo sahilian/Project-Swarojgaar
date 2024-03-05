@@ -33,7 +33,7 @@ namespace Swarojgaar.Services.Implementation
         {
             try
             {
-                List<SavedJob> savedJobs = _savedJobRepository.GetAll();
+                IOrderedEnumerable<SavedJob> savedJobs = _savedJobRepository.GetAll().OrderByDescending(sj => sj.SavedJobId);
                 List<GetAllSavedJobsVM> getAllSavedJobs = _mapper.Map<List<GetAllSavedJobsVM>>(savedJobs);
                 return getAllSavedJobs;
             }

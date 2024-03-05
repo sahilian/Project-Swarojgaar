@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Swarojgaar.Models;
@@ -59,7 +60,14 @@ public class JobService : IJobService
         try
         {
             // Filter jobs based on the provided user ID
-            IOrderedEnumerable<Job> jobs = _jobRepository.GetAll().Where(job => job.UserId == userId).OrderByDescending(job => job.JobId);
+            IEnumerable<Job> jobs = _jobRepository.GetAll().Where(job => job.UserId == userId).OrderByDescending(job => job.JobId)
+                .Select(
+                    j =>
+                    {
+                        j.EncryptedJobId = protector.Protect(j.JobId.ToString());
+                        return j;
+                    }
+                    );
 
             List<GetAllJobsVM> getAllJobs = _mapper.Map<List<GetAllJobsVM>>(jobs);
             return getAllJobs;
@@ -120,6 +128,11 @@ public class JobService : IJobService
             int decryptedIntJobId = Convert.ToInt32(decryptedJobId);
             Job job = _jobRepository.GetDetails(decryptedIntJobId);
             DetailsJobVM details = _mapper.Map<DetailsJobVM>(job);
+            // Ensure EncryptedJobId is not null, home page ra bhitra bata get details ma farak bhako bhayera
+            if (details != null)
+            {
+                details.EncryptedJobId = protector.Protect(job.JobId.ToString());
+            }
             return details;
         }
         catch (Exception e)
@@ -129,7 +142,7 @@ public class JobService : IJobService
         }
     }
 
-    public bool CreateJob(CreateJobVM createViewModel, string userId)
+    public bool CreateJob(CreateJobVM createViewModel)
     {
 
         try
@@ -144,11 +157,13 @@ public class JobService : IJobService
         }
     }
 
-    public EditJobVM EditJob(int id)
+    public EditJobVM EditJob(string id)
     {
         try
         {
-            Job job = _jobRepository.GetDetails(id);
+            string decryptedJobId = protector.Unprotect(id);
+            int decryptedIntJobId = Convert.ToInt32(decryptedJobId);
+            Job job = _jobRepository.GetDetails(decryptedIntJobId);
             EditJobVM editViewModel = _mapper.Map<EditJobVM>(job);
             return editViewModel;
         }
@@ -174,11 +189,13 @@ public class JobService : IJobService
     }
 
 
-    public bool DeleteJob(int id)
+    public bool DeleteJob(string id)
     {
         try
         {
-            return _jobRepository.Delete(id);
+            string decryptedJobId = protector.Unprotect(id);
+            int decryptedIntJobId = Convert.ToInt32(decryptedJobId);
+            return _jobRepository.Delete(decryptedIntJobId);
         }
         catch (Exception e)
         {

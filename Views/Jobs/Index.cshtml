@@ -8,8 +8,11 @@
     ViewData["Title"] = "GetAll";
 }
 
+<div class="alert alert-success" style="margin-left: 12px; text-align: center">
+    <h2>List of all Jobs:</h2>
+    <h2 class="btn btn-success btn-lg">Total Jobs: @Model.TotalItemCount</h2>
+</div>
 
-<h1 style="margin-left: 12px">List of Jobs</h1>
 @if (TempData["ResultOk"] != null)
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>

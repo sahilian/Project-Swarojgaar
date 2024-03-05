@@ -8,9 +8,9 @@ public interface IJobService
     List<GetAllJobsVM> GetAllJobs();
     public List<GetAllJobsVM> GetJobsByUserId(string userId);
     DetailsJobVM GetJobDetails(string id);
-    public bool CreateJob(CreateJobVM createViewModel, string userId);
+    public bool CreateJob(CreateJobVM createViewModel);
     bool EditJob(EditJobVM  editViewModel);
-    bool DeleteJob(int id);
-    EditJobVM EditJob(int id);
+    bool DeleteJob(string id);
+    EditJobVM EditJob(string id);
     public Task<List<JobApplicantVM>> GetJobApplicants(int jobId);
 }

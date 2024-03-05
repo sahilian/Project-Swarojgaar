@@ -5,7 +5,7 @@
     ViewData["Title"] = "GetDetails";
 }
 
-<h1>Save this job!</h1>
+<h1>Get Details</h1>
 
 <div>
     <hr />
@@ -36,12 +36,6 @@
         </dd>
     </dl>
 </div>
-<form method="post" asp-controller="SaveJob" asp-action="SaveJob">
-    <input type="hidden" asp-for="JobId" />
-    <input type="submit" value="Save" asp-route-id="@Model?.EncryptedJobId" class="btn btn-success" />
-    <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to List</a>
-</form>
-@* <div>
-    <a asp-controller="SaveJob" asp-action="SaveJob" asp-route-id="@Model?.JobId" class="btn btn-success">Save</a>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to List</a>
-</div> *@
+<div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to Home</a>
+</div>

@@ -38,7 +38,7 @@
 </div>
 <form method="post" asp-controller="JobApplication" asp-action="CreateJobApplication">
     <input type="hidden" asp-for="JobId" />
-    <input type="submit" value="Apply" asp-route-id="@Model?.JobId" class="btn btn-success" />
+    <input type="submit" value="Apply" asp-route-id="@Model?.EncryptedJobId" class="btn btn-success" />
     <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to List</a>
 </form>
 @* <div>

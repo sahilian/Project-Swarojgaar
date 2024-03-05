@@ -119,7 +119,6 @@ namespace Swarojgaar.Controllers
             {
                 // Get the current user's ID
                 var userId = _userManager.GetUserId(User);
-                // Check if the user has already applied for the job
                 var jobDetails = _genericRepository.GetDetails(createJobApplication.JobId);
 
                 CreateJobApplicationVM createjob = new CreateJobApplicationVM()
@@ -131,7 +130,7 @@ namespace Swarojgaar.Controllers
                     ExpiryDate = jobDetails.ExpiryDate,
                     JobId = jobDetails.JobId
                 };
-
+                // Check if the user has already applied for the job
                 var existingApplication = _context.JobApplications
                     .FirstOrDefault(j => j.JobId == jobDetails.JobId && j.UserId == userId);
 
@@ -143,7 +142,7 @@ namespace Swarojgaar.Controllers
                 }
                 else
                 {
-                    _jobApplicationService.CreateJobApplication(createjob, userId);
+                    _jobApplicationService.CreateJobApplication(createjob);
                     TempData["ResultOk"] = "Job Applied Successfully !";
                     return RedirectToAction("Index", "JobApplication");
                 }

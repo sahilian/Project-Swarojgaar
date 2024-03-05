@@ -144,7 +144,7 @@ namespace Swarojgaar.Controllers
             {
                 var userId = _userManager.GetUserId(User);
                 createViewModel.UserId = userId;
-                _jobService.CreateJob(createViewModel, userId);
+                _jobService.CreateJob(createViewModel);
                 TempData["ResultOk"] = "Data Created Successfully !";
                 return RedirectToAction("Index", "Jobs");
             }
@@ -156,9 +156,9 @@ namespace Swarojgaar.Controllers
         }
 
         // GET: Jobs/Edit/5
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string id)
         {
-            if (id == null || id == 0)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -170,6 +170,8 @@ namespace Swarojgaar.Controllers
         [HttpPost]
         public IActionResult Edit(EditJobVM editViewModel)
         {
+            var userId = _userManager.GetUserId(User);
+            editViewModel.UserId = userId;
             _jobService.EditJob(editViewModel);
             TempData["ResultOk"] = "Data Updated Successfully !";
             return RedirectToAction("Index", "Jobs");
@@ -183,7 +185,7 @@ namespace Swarojgaar.Controllers
 
         // POST: Jobs/Delete/5
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteJob(int id)
+        public IActionResult DeleteJob(string id)
         {
             _jobService.DeleteJob(id);
             TempData["ResultOk"] = "Data Deleted Successfully !";

@@ -11,6 +11,7 @@ using Swarojgaar.ViewModel.SavedJobVM;
 
 namespace Swarojgaar.Controllers
 {
+    [Authorize(Roles = "Job_Seeker")]
     public class SaveJobController : Controller
     {
         private readonly IJobApplicationService _jobApplicationService;
@@ -42,6 +43,7 @@ namespace Swarojgaar.Controllers
             _savedJobRepository = savedJobRepository;
         }
 
+        [Authorize(Roles = "Job_Seeker")]
         public IActionResult Index()
         {
             return View(_saveJobService.GetAllSavedJobs());
@@ -54,7 +56,7 @@ namespace Swarojgaar.Controllers
             return View(_jobService.GetJobDetails(id));
         }
 
-        [Authorize]
+        [Authorize(Roles = "Job_Seeker")]
         [HttpPost]
         public IActionResult SaveJob(SaveJobVM saveJobVm)
         {
@@ -99,13 +101,13 @@ namespace Swarojgaar.Controllers
                 return RedirectToAction("Index", "JobApplication");
             }
         }
-
+        [Authorize(Roles = "Job_Seeker")]
         [HttpGet]
         public IActionResult ApplyAndRemove(int savedJobId)
         {
             return View(_saveJobService.GetSavedJobDetail(savedJobId));
         }
-
+        [Authorize(Roles = "Job_Seeker")]
         [HttpPost]
         public IActionResult ApplyAndRemove(CreateJobApplicationVM createJobApplication, int savedJobId)
         {
@@ -126,7 +128,7 @@ namespace Swarojgaar.Controllers
                     ExpiryDate = jobDetails.ExpiryDate,
                     JobId = jobDetails.JobId
                 };
-                _jobApplicationService.CreateJobApplication(createjob, userId);
+                _jobApplicationService.CreateJobApplication(createjob);
                 _saveJobService.ApplyAndRemove(savedJobId, userId);
                 transaction.Commit();
                 TempData["ResultOk"] = "Job Applied Successfully !";
@@ -140,13 +142,13 @@ namespace Swarojgaar.Controllers
                 return RedirectToAction("Index", "JobApplication");
             }
         }
-
+        [Authorize(Roles = "Job_Seeker")]
         [HttpGet]
         public IActionResult DeleteSavedJob(int savedJobId)
         {
             return View(_saveJobService.GetSavedJobDetail(savedJobId));
         }
-
+        [Authorize(Roles = "Job_Seeker")]
         [HttpPost, ActionName("DeleteSavedJob")]
         public IActionResult DeleteSaved(int savedJobId)
         {

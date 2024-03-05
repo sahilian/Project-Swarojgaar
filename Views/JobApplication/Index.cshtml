@@ -38,7 +38,14 @@
         }
     }
 }
-<h2>Your Applied Jobs</h2>
+
+<div class="alert alert-success" style="margin-left: 12px; text-align: center">
+    <h2>List of your applied jobs:</h2>
+    <h2 class="btn btn-primary">Total Jobs Applied: @userAppliedJobs.Count</h2>
+    <h2 class="btn btn-success">Shortlisted Jobs: @userAppliedJobs.Count(u=> u.ApplicationStatus == 1)</h2>
+    <h2 class="btn btn-warning">Pending Jobs: @userAppliedJobs.Count(u => u.ApplicationStatus == 0)</h2>
+    <h2 class="btn btn-danger">Rejected Jobs: @userAppliedJobs.Count(u => u.ApplicationStatus == 2)</h2>
+</div>
 @if (userAppliedJobs.Any())
 {
     <table class="table table-bordered table-hover" style="background-color: white">

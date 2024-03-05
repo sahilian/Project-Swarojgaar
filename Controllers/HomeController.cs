@@ -46,6 +46,10 @@ namespace Swarojgaar.Controllers
             var allJobs = _jobService.GetAllJobs();
             return View(allJobs);
         }
+        public IActionResult Detail(string id)
+        {
+            return View(_jobService.GetJobDetails(id));
+        }
 
         public IActionResult Privacy()
         {

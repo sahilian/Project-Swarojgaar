@@ -26,7 +26,7 @@ namespace Swarojgaar.Services.Implementation
         {
             try
             {
-                List<JobApplication> jobApplications = _jobApplicationRepository.GetAll();
+                IOrderedEnumerable<JobApplication> jobApplications = _jobApplicationRepository.GetAll().OrderByDescending(j => j.JobApplicationId);
                 List<GetAllJobApplicationsVM> getAllJobApplications =_mapper.Map<List<GetAllJobApplicationsVM>>(jobApplications);
                 return getAllJobApplications;
             }
@@ -37,7 +37,7 @@ namespace Swarojgaar.Services.Implementation
             }
         }
 
-        public bool CreateJobApplication(CreateJobApplicationVM createJobApplication, string userId)
+        public bool CreateJobApplication(CreateJobApplicationVM createJobApplication)
         {
             try
             {
