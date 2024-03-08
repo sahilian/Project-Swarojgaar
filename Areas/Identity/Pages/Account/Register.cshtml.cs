@@ -114,6 +114,12 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
 
+            public string DocFile { get; set; }
+            [Required]
+            [Display(Name = "Upload Your Document")]
+            public IFormFile DocFormFile { get; set; }
+
+
         }
 
 
@@ -139,9 +145,17 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                // Check if the email already exists
+                var existingUser = await _userManager.FindByEmailAsync(Input.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError(string.Empty, "This email address is already in use.");
+                    return Page();
+                }
+
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None); //Pahila Input.Email thiyo
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 //---------->Added here
@@ -149,6 +163,24 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
                 user.LastName = Input.LastName;
                 //user.PhoneNumber = Input.PhoneNumber;
                 user.Location = Input.Location;
+
+                // Handle file upload
+                if (Input.DocFormFile != null && Input.DocFormFile.Length > 0)
+                {
+                    // Generate unique file name
+                    var fileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Input.DocFormFile.FileName);
+                    // Define upload path (you may need to adjust this to your project structure)
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", fileName);
+
+                    // Save file to disk
+                    using (var stream = new FileStream(uploadPath, FileMode.Create))
+                    {
+                        await Input.DocFormFile.CopyToAsync(stream);
+                    }
+
+                    // Save file path to user's property
+                    user.DocFile = fileName; // Or you can save the full path
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -189,7 +221,6 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
-
         private User CreateUser()
         {
             try

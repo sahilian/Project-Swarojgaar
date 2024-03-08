@@ -12,8 +12,8 @@ using Swarojgaar.Data;
 namespace Swarojgaar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240116040108_initialcreate")]
-    partial class initialcreate
+    [Migration("20240307083928_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,21 +54,21 @@ namespace Swarojgaar.Migrations
                         new
                         {
                             Id = "65c00570-b09f-4c8b-a412-eea238c829b7",
-                            ConcurrencyStamp = "5548cdf1-605b-4bda-8bd7-c2e5a3d57738",
+                            ConcurrencyStamp = "5ff9879d-68bb-4df3-b9cc-aa54bdf0dce4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "64a99865-2144-4979-942e-71a8540d5061",
-                            ConcurrencyStamp = "8cd07b0f-0881-4e16-be19-ca683a36f293",
+                            ConcurrencyStamp = "46c18d92-f538-4262-8650-1cd626649db5",
                             Name = "Job_Provider",
                             NormalizedName = "JOB_PROVIDER"
                         },
                         new
                         {
                             Id = "d959fac3-736d-437f-b467-00bce9b64a65",
-                            ConcurrencyStamp = "5b45459b-26cf-4ca4-b22f-7946f2e220fe",
+                            ConcurrencyStamp = "3f70af73-8425-4fe3-8a11-b6a52fb7672b",
                             Name = "Job_Seeker",
                             NormalizedName = "JOB_SEEKER"
                         });
@@ -172,15 +172,15 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5f72c52c-84ad-4656-b941-66324a798316",
+                            Id = "9e50ee9d-83ab-4fd8-b557-031bd7da9054",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7cbc04af-041c-40f1-96f2-d29091379972",
+                            ConcurrencyStamp = "3260f9b6-3e7a-439d-94b2-bd4f579c352a",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFWLSgdcOkhjqHn3BLjg/5K4Ix9ySV9BzWPTgw2Q14BicR/Sb2MHoQ/EJfr9q56g8w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGuIsZV8wDsNN2W0R12C0VBTY/TUTAHjovI5bJnqxB2u4UT4zCnbuC/xJIkxsfiWXw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "UniqueSecurityStamp",
                             TwoFactorEnabled = false,
@@ -254,7 +254,7 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "5f72c52c-84ad-4656-b941-66324a798316",
+                            UserId = "9e50ee9d-83ab-4fd8-b557-031bd7da9054",
                             RoleId = "65c00570-b09f-4c8b-a412-eea238c829b7"
                         });
                 });
@@ -320,6 +320,9 @@ namespace Swarojgaar.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobApplicationId"), 1L, 1);
+
+                    b.Property<int>("ApplicationStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -392,6 +395,10 @@ namespace Swarojgaar.Migrations
             modelBuilder.Entity("Swarojgaar.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("DocFile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

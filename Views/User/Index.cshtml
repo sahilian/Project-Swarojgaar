@@ -24,31 +24,35 @@
     <tbody>
         @foreach (var user in Model)
         {
-            <tr>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>
-                    @foreach (var role in await _userManager.GetRolesAsync(user))
-                    {
-                        // Display roles as buttons
-                        <button type="button" class="@GetButtonClass(role)" style="width: 115px">@role</button>
-                    }
-                </td>
-                <td>
-                    @if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    {
-                        <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary" style="width: 150px">Details</a>
-                    }
-                    else
-                    {
-                        <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary">Details</a>
-                    }
-                    @if (!await _userManager.IsInRoleAsync(user, "Admin"))
-                    {
-                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a>
-                    }
-                </td>
-            </tr>
+            @if (!await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        @foreach (var role in await _userManager.GetRolesAsync(user))
+                        {
+                            // Display roles as buttons
+                            <button type="button" class="@GetButtonClass(role)" style="width: 115px">@role</button>
+                        }
+                    </td>
+                    <td>
+                        @if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary" style="width: 150px">Details</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary">Details</a>
+                        }
+                        @if (!await _userManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+            
         }
     </tbody>
 </table>

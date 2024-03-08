@@ -6,7 +6,7 @@ using Swarojgaar.Repository.Implementation;
 using Swarojgaar.Repository.Interface;
 using Swarojgaar.Services.Implementation;
 using Swarojgaar.Services.Interface;
-using Swarojgaar.Migrations;
+
 using Swarojgaar.Security;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,10 +26,16 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionStrings));
 
+
 builder.Services.AddDefaultIdentity<IdentityUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
-    .AddDefaultTokenProviders()
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddSignInManager<SignInManager<IdentityUser>>()
+    .AddDefaultTokenProviders();
+
+
+
+
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

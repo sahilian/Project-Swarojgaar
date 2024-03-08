@@ -8,5 +8,6 @@ namespace Swarojgaar.Models
         public string LastName { get; set; }
         public string Location { get; set; }
         public ICollection<Job> Jobs { get; set; }
+        public string DocFile { get; set; }
     }
 }
