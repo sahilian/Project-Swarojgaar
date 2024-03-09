@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swarojgaar.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,9 +11,11 @@ namespace Swarojgaar.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public UserController(UserManager<IdentityUser> userManager)
+        public UserController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
+            _context = context;
             _userManager = userManager;
         }
 
@@ -64,29 +67,72 @@ namespace Swarojgaar.Controllers
             return View(user);
         }
 
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> DeleteConfirmed(string id)
+        //{
+        //    var user = await _userManager.FindByIdAsync(id);
+
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    // Delete saved jobs and job applications associated with the user
+        //    var savedJobs = await _context.SavedJobs.Where(sj => sj.UserId == id).ToListAsync();
+        //    var jobApplications = await _context.JobApplications.Where(ja => ja.UserId == id).ToListAsync();
+
+        //    var result = await _userManager.DeleteAsync(user);
+
+        //    if (result.Succeeded)
+        //    {
+        //        _context.SavedJobs.RemoveRange(savedJobs);
+        //        _context.JobApplications.RemoveRange(jobApplications);
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    // Handle errors, if any
+        //    return View(user);
+        //}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            // Find the user by id
+            var user = await _context.Users.FindAsync(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            var result = await _userManager.DeleteAsync(user);
-
-            if (result.Succeeded)
+            try
             {
+                // Delete saved jobs associated with the user
+                var savedJobs = await _context.SavedJobs.Where(sj => sj.UserId == id).ToListAsync();
+                _context.SavedJobs.RemoveRange(savedJobs);
+
+                // Delete job applications associated with the user
+                var jobApplications = await _context.JobApplications.Where(ja => ja.UserId == id).ToListAsync();
+                _context.JobApplications.RemoveRange(jobApplications);
+
+                // Remove the user from the database context
+                _context.Users.Remove(user);
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
-
-            // Handle errors, if any
-            return View(user);
+            catch (Exception ex)
+            {
+                // Log or handle any errors that occur during deletion
+                return RedirectToAction("Error", "Home");
+            }
         }
-
         public IActionResult DownloadDocument(string docFileName)
         {
             // Get the file path based on the file name

@@ -32,33 +32,44 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             var user = await UserManager.GetUserAsync(User);
-                            var roles = await UserManager.GetRolesAsync(user);
-                            @if (roles.Contains("Admin"))
+
+                            if (user != null)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                                </li>
+                                var roles = await UserManager.GetRolesAsync(user);
+
+                                if (roles != null)
+                                {
+
+                                    @if (roles.Contains("Admin"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+                                        </li>
+                                    }
+
+                                    @if (roles.Contains("Admin") || roles.Contains("Job_Provider"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
+                                        </li>
+                                    }
+
+                                    @if (roles.Contains("Job_Seeker"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="SaveJob" asp-action="Index">Saved Jobs</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="JobApplication" asp-action="Index">Applied Jobs</a>
+                                        </li>
+                                    }
+                                }
+
                             }
 
-                            @if (roles.Contains("Admin") || roles.Contains("Job_Provider"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
-                                </li>
-                            }
-
-                            @if (roles.Contains("Job_Seeker"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="SaveJob" asp-action="Index">Saved Jobs</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="JobApplication" asp-action="Index">Applied Jobs</a>
-                                </li>
-                            }
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
