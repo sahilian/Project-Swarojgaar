@@ -92,6 +92,44 @@ namespace Swarojgaar.Controllers
             }
         }
 
+        public IActionResult DownloadDocument(string docFileName)
+        {
+            // Get the file path based on the file name
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", docFileName);
+
+            // Check if the file exists
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound(); // Return a 404 Not Found if the file does not exist
+            }
+
+            // Read the file contents
+            var fileContents = System.IO.File.ReadAllBytes(filePath);
+
+            // Determine the MIME type based on the file extension
+            var mimeType = GetMimeType(docFileName);
+
+            // Return the file as a stream
+            return File(fileContents, mimeType, docFileName);
+        }
+
+        private string GetMimeType(string fileName)
+        {
+            var fileExtension = Path.GetExtension(fileName).ToLowerInvariant();
+            switch (fileExtension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+                case ".png":
+                    return "image/png";
+                case ".pdf":
+                    return "application/pdf";
+                default:
+                    return "application/octet-stream";
+            }
+        }
+
         [HttpPost]
         public IActionResult UpdateStatus(int applicationId, int status)
         {

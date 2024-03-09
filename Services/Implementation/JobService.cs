@@ -103,7 +103,8 @@ public class JobService : IJobService
                         UserId = application.UserId,
                         FirstName = applicationUser.FirstName,
                         LastName = applicationUser.LastName,
-                        Location = applicationUser.Location
+                        Location = applicationUser.Location,
+                        DocFile = applicationUser.DocFile,
                         // Add other user details as needed
                     };
 

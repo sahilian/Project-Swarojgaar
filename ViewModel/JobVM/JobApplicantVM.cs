@@ -7,5 +7,7 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Location { get; set; }
+        public string DocFile { get; set; }
+
     }
 }
