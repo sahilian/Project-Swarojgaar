@@ -15,7 +15,7 @@ using Swarojgaar.Data;
 
 namespace Swarojgaar.Controllers
 {
-    //[Authorize(Roles = "Admin, Job_Provider")]
+    [Authorize(Roles = "Admin, Job_Provider")]
     public class JobsController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
