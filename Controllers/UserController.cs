@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Swarojgaar.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
