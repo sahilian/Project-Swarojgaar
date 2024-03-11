@@ -12,7 +12,7 @@ using Swarojgaar.Data;
 namespace Swarojgaar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240309051945_initial")]
+    [Migration("20240311083225_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,21 +54,21 @@ namespace Swarojgaar.Migrations
                         new
                         {
                             Id = "65c00570-b09f-4c8b-a412-eea238c829b7",
-                            ConcurrencyStamp = "28ff45e8-0c4e-43b1-93a9-2657261f8029",
+                            ConcurrencyStamp = "8d360a05-e069-4ef5-b72d-f7b808a7c34a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "64a99865-2144-4979-942e-71a8540d5061",
-                            ConcurrencyStamp = "838ff4d9-a142-42e3-af95-0b44944587fe",
+                            ConcurrencyStamp = "8b764842-2cba-4dea-9dba-3df756a68133",
                             Name = "Job_Provider",
                             NormalizedName = "JOB_PROVIDER"
                         },
                         new
                         {
                             Id = "d959fac3-736d-437f-b467-00bce9b64a65",
-                            ConcurrencyStamp = "0070934f-2140-4264-894e-0213fedaf210",
+                            ConcurrencyStamp = "47b78a18-cc1a-4d1f-807b-7715e87258cc",
                             Name = "Job_Seeker",
                             NormalizedName = "JOB_SEEKER"
                         });
@@ -172,15 +172,15 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a3101078-6b04-4efa-a209-8b5b0e9ac49a",
+                            Id = "ad482637-0173-4b2f-a97e-ee554fbcadb8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eb0f3dd2-2158-4571-9f6c-dbcc619318fc",
+                            ConcurrencyStamp = "42f1c268-0644-4685-8ed3-412f90013887",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEO69irWBOyPscBcyHxTWJ9kwgkemtE7lKIIPJkBHatOAcz6XNTxAAzOVRBxkY2TCEA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBkxW0qz0YcgEGdiJKZlnd5lAT95iygrMlI02HW6FdSrF+Si7JipOk+fYJwfc3SBdg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "UniqueSecurityStamp",
                             TwoFactorEnabled = false,
@@ -254,7 +254,7 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "a3101078-6b04-4efa-a209-8b5b0e9ac49a",
+                            UserId = "ad482637-0173-4b2f-a97e-ee554fbcadb8",
                             RoleId = "65c00570-b09f-4c8b-a412-eea238c829b7"
                         });
                 });
