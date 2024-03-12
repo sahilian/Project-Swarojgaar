@@ -16,13 +16,13 @@ public class JobService : IJobService
     private readonly IGenericRepository<Job> _jobRepository;
     private readonly IGenericRepository<JobApplication> _jobApplicationRepository;
     private readonly IMapper _mapper;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly IDataProtector protector;
 
 
     public JobService(IGenericRepository<Job> jobRepository, 
         IMapper mapper, 
-        UserManager<IdentityUser> userManager, 
+        UserManager<User> userManager, 
         IGenericRepository<JobApplication> jobApplicationRepository, 
         IDataProtectionProvider dataProtectionProvider,
         DataProtectionPurposeStrings dataProtectionPurposeStrings)

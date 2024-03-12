@@ -10,15 +10,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Swarojgaar.Models;
 
 namespace Swarojgaar.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -35,7 +36,7 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
         {
             if (userId == null || email == null || code == null)
             {
-                return RedirectToPage("/GetAll");
+                return RedirectToPage("/Index");
             }
 
             var user = await _userManager.FindByIdAsync(userId);

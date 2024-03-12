@@ -1,8 +1,8 @@
 ﻿@page
 @model LoginModel
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @{

@@ -14,9 +14,9 @@ namespace Swarojgaar.Services.Implementation
     {
         private readonly IGenericRepository<JobApplication> _jobApplicationRepository;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public JobApplicationService(IGenericRepository<JobApplication> jobApplicationRepository, IMapper mapper, UserManager<IdentityUser> userManager)
+        public JobApplicationService(IGenericRepository<JobApplication> jobApplicationRepository, IMapper mapper, UserManager<User> userManager)
         {
             _jobApplicationRepository = jobApplicationRepository;
             _mapper = mapper;

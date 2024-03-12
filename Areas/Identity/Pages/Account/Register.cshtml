@@ -1,8 +1,8 @@
 ﻿@page
 @model RegisterModel
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @{
@@ -70,7 +70,11 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="PhoneNumber" aria-required="true" />
+                    <label asp-for="Input.PhoneNumber"></label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Location" class="form-control" autocomplete="Location" aria-required="true" />
                     <label asp-for="Input.Location"></label>

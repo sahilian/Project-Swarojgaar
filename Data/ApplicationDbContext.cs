@@ -5,12 +5,13 @@ using Swarojgaar.Models;
 
 namespace Swarojgaar.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<SavedJob> SavedJobs { get; set; }
@@ -32,10 +33,15 @@ namespace Swarojgaar.Data
             );
             var adminId = Guid.NewGuid().ToString();
             // Seed Admin User
-            var adminUser = new IdentityUser
+            var adminUser = new User
             {
                 Id = adminId, // Generate a unique ID for the admin user
                 UserName = "admin@gmail.com",
+                FirstName = "Admin",
+                LastName = "",
+                PhoneNumber = "",
+                Location = "",
+                DocFile = "",
                 NormalizedUserName = "ADMIN@GMAIL.COM",
                 Email = "admin@gmail.com",
                 NormalizedEmail = "ADMIN@GMAIL.COM",
@@ -43,10 +49,10 @@ namespace Swarojgaar.Data
                 SecurityStamp = "UniqueSecurityStamp"
             };
 
-            var passwordHasher = new PasswordHasher<IdentityUser>();
+            var passwordHasher = new PasswordHasher<User>();
             adminUser.PasswordHash = passwordHasher.HashPassword(null, "Secret123$");
 
-            modelBuilder.Entity<IdentityUser>().HasData(adminUser);
+            modelBuilder.Entity<User>().HasData(adminUser);
 
             // Assign Admin Role to Admin User
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(

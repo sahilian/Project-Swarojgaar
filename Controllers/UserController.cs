@@ -5,16 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Swarojgaar.Models;
 
 namespace Swarojgaar.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public UserController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public UserController(UserManager<User> userManager, ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;

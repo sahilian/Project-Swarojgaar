@@ -18,14 +18,14 @@ namespace Swarojgaar.Controllers
     [Authorize(Roles = "Admin, Job_Provider")]
     public class JobsController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IJobService _jobService;
         private readonly IGenericRepository<Job> _genericRepository;
         private readonly ApplicationDbContext _dbContext;
 
         public JobsController(
             IJobService jobService,
-            UserManager<IdentityUser> userManager,
+            UserManager<User> userManager,
             IGenericRepository<Job> genericRepository,
             ApplicationDbContext dbContext)
         {

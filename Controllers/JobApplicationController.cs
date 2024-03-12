@@ -1,64 +1,4 @@
-﻿//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using Swarojgaar.Services.Implementation;
-//using Swarojgaar.Services.Interface;
-//using Swarojgaar.ViewModel.JobApplicationVM;
-//using Swarojgaar.ViewModel.JobVM;
-//using System.Security.Claims;
-//using AutoMapper;
-
-//namespace Swarojgaar.Controllers
-//{
-//    public class JobApplicationController : Controller
-//    {
-//        private readonly IJobApplicationService _jobApplicationService;
-//        private readonly IJobService _jobService;
-//        private readonly IMapper _mapper;
-
-//        public JobApplicationController(IJobApplicationService jobApplicationService, IJobService jobService, IMapper mapper)
-//        {
-//            _jobService = jobService;
-//            _jobApplicationService = jobApplicationService;
-//            _mapper = mapper;
-//        }
-//        public IActionResult Index()
-//        {
-//            return View(_jobApplicationService.GetAllJobApplications());
-//        }
-//        [Authorize(Roles = "Job_Seeker")]
-//        [HttpGet]
-//        public IActionResult CreateJobApplication(int id)
-//        {
-//            return View(_jobService.GetJobDetails(id));
-//        }
-
-//        [Authorize]
-//        [HttpPost]
-//        public IActionResult CreateJobApplication(CreateJobApplicationVM createJobApplication)
-//        {
-//            try
-//            {
-//                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-//                //var username = User.Identity.Name;
-
-//                var jobDetails = _jobService.GetJobDetails(createJobApplication.JobId);
-//                _mapper.Map(jobDetails, createJobApplication);
-//                _jobApplicationService.CreateJobApplication(createJobApplication, userId);
-//                TempData["ResultOk"] = "Job Applied Successfully !";
-//                return RedirectToAction("Index", "JobApplication");
-//            }
-//            catch (Exception e)
-//            {
-//                Console.WriteLine(e);
-//                throw;
-//            }
-//        }
-
-//    }
-//}
-
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -77,7 +17,7 @@ namespace Swarojgaar.Controllers
         private readonly IJobApplicationService _jobApplicationService;
         private readonly IJobService _jobService;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IGenericRepository<Job> _genericRepository;
         private readonly ApplicationDbContext _context;
 
@@ -87,7 +27,7 @@ namespace Swarojgaar.Controllers
             IMapper mapper,
             ApplicationDbContext context,
             IGenericRepository<Job> genericRepository,
-            UserManager<IdentityUser> userManager)
+            UserManager<User> userManager)
         {
             _genericRepository = genericRepository;
             _jobService = jobService;

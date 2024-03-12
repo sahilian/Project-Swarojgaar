@@ -11,14 +11,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Swarojgaar.Models;
 
 namespace Swarojgaar.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
@@ -33,7 +34,7 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
         {
             if (userId == null || code == null)
             {
-                return RedirectToPage("/GetAll");
+                return RedirectToPage("/Index");
             }
 
             var user = await _userManager.FindByIdAsync(userId);

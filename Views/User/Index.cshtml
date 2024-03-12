@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
-@inject UserManager<IdentityUser> _userManager
+@model IEnumerable<User>
+@inject UserManager<User> _userManager
 
 <div class="alert alert-success" style="text-align: center">
     <h2>List of all registered users:</h2>

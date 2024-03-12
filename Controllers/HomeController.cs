@@ -35,9 +35,15 @@ namespace Swarojgaar.Controllers
             if (string.IsNullOrEmpty(search_item))
                 return PartialView("_JobListPartial", allJobs);
 
-            var results = allJobs.Where(j =>
-                j.Title.ToLower().Contains(search_item)).ToList();
+            var searchTermLower = search_item.ToLower();
 
+            var results = allJobs.Where(j =>
+                j.Title.ToLower().Contains(searchTermLower)).ToList();
+
+            if (results.Count == 0)
+            {
+                ViewBag.Message = "No Jobs Found!";
+            }
             return PartialView("_JobListPartial", results);
         }
 

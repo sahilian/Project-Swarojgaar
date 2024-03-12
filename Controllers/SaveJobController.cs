@@ -18,7 +18,7 @@ namespace Swarojgaar.Controllers
         private readonly ISaveJobService _saveJobService;
         private readonly IJobService _jobService;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IGenericRepository<Job> _genericRepository;
         private readonly ApplicationDbContext _context;
         private readonly ISavedJobRepository _savedJobRepository;
@@ -30,7 +30,7 @@ namespace Swarojgaar.Controllers
             IMapper mapper,
             ApplicationDbContext context,
             IGenericRepository<Job> genericRepository,
-            UserManager<IdentityUser> userManager,
+            UserManager<User> userManager,
             ISavedJobRepository savedJobRepository)
         {
             _jobApplicationService = jobApplicationService;

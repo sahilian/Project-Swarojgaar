@@ -13,12 +13,12 @@ namespace Swarojgaar.Services.Implementation
     {
         private readonly IJobApplicationService _jobApplicationService;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly ISavedJobRepository _savedJobRepository;
 
         public SaveJobService(
             IMapper mapper,
-            UserManager<IdentityUser> userManager,
+            UserManager<User> userManager,
             IJobApplicationService jobApplicationService,
             ISavedJobRepository savedJobRepository)
         {
