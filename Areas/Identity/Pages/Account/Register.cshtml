@@ -8,6 +8,15 @@
 @{
     ViewData["Title"] = "Log in";
 }
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    /* Custom CSS to remove left padding from role buttons */
+    .role-button {
+        padding-left: 0 !important;
+    }
+</style>
+
 @if (!SignInManager.IsSignedIn(User))
 {
     <div class="row justify-content-center align-items-center">
@@ -16,16 +25,52 @@
                 <h2>Create a new account.</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label class="mb-3">Select Your Role</label><br />
                 <div class="form-floating mb-3">
-                    <input asp-for="Input.FirstName" class="form-control" autocomplete="FirstName" aria-required="true" />
-                    <label asp-for="Input.FirstName"></label>
-                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    @foreach (var roleItem in Model.Input.RoleList)
+                    {
+                        if (roleItem.Value == "Job_Provider")
+                        {
+                            <div class="form-check form-check-inline role-button">
+                                <input class="btn-check" type="radio" asp-for="Input.Role" id="@($"role_{roleItem.Value}")" value="@roleItem.Value" onclick="changeLabels('@roleItem.Value')">
+                                <label class="btn btn-outline-primary" for="@($"role_{roleItem.Value}")"><i class="bi bi-buildings-fill"></i> @roleItem.Text</label>
+                            </div>
+                        }
+                        else if (roleItem.Value == "Job_Seeker")
+                        {
+                            <div class="form-check form-check-inline role-button">
+                                <input class="btn-check" type="radio" asp-for="Input.Role" id="@($"role_{roleItem.Value}")" value="@roleItem.Value" onclick="changeLabels('@roleItem.Value')">
+                                <label class="btn btn-outline-primary" for="@($"role_{roleItem.Value}")"><i class="bi bi-person-fill"></i> @roleItem.Text</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-check form-check-inline role-button">
+                                <input class="btn-check" type="radio" asp-for="Input.Role" id="@($"role_{roleItem.Value}")" value="@roleItem.Value" onclick="changeLabels('@roleItem.Value')">
+                                <label class="btn btn-outline-primary" for="@($"role_{roleItem.Value}")"><i class="bi bi-person-fill"></i> @roleItem.Text</label>
+                            </div>
+                        }
+                    }
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
                 </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.LastName" class="form-control" autocomplete="LastName" aria-required="true" />
-                    <label asp-for="Input.LastName"></label>
-                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.FirstName" class="form-control" autocomplete="FirstName" aria-required="true" />
+                            <label id="firstNameLabel" asp-for="Input.FirstName"></label>
+                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.LastName" class="form-control" autocomplete="LastName" aria-required="true" />
+                            <label id="lastNameLabel" asp-for="Input.LastName"></label>
+                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Location" class="form-control" autocomplete="Location" aria-required="true" />
                     <label asp-for="Input.Location"></label>
@@ -48,16 +93,16 @@
                 </div>
                 <div class="form-floating mb-3">
                     <input asp-for="Input.DocFormFile" type="file" class="form-control" />
-                    <label asp-for="Input.DocFormFile" class="control-label"></label>
+                    <label asp-for="Input.DocFormFile" id="docLabel" class="control-label"></label>
                     <span asp-validation-for="Input.DocFormFile" class="text-danger"></span>
                 </div>
-                <div class="form-floating mb-3">
+@*                 <div class="form-floating mb-3">
                     <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" aria-required="true">
                         <option value="">Select Role</option>
                     </select>
                     <label asp-for="Input.Role"></label>
                     <span asp-validation-for="Input.Role" class="text-danger"></span>
-                </div>
+                </div> *@
 
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
             </form>
@@ -72,3 +117,17 @@ else
 {
     <h1>You are already registered!</h1>
 }
+
+<script>
+    function changeLabels(role) {
+        if (role === "Job_Provider") {
+            document.getElementById("firstNameLabel").textContent = "Company Name";
+            document.getElementById("lastNameLabel").textContent = "Company Type";
+            document.getElementById("docLabel").textContent = "Upload Company PAN Document";
+        } else {
+            document.getElementById("firstNameLabel").textContent = "First Name";
+            document.getElementById("lastNameLabel").textContent = "Last Name";
+            document.getElementById("docLabel").textContent = "Upload Your Resume";
+        }
+    }
+</script>
