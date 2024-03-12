@@ -225,6 +225,15 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
                 }
             }
 
+            // Repopulate the RoleList
+            Input.RoleList = _roleManager.Roles.Where(role => role.Name == "Job_Provider" || role.Name == "Job_Seeker")
+                .Select(role => new SelectListItem
+                {
+                    Text = role.Name,
+                    Value = role.Name
+                })
+                .ToList();
+
             // If we got this far, something failed, redisplay form
             return Page();
         }

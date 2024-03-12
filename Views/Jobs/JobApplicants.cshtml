@@ -12,6 +12,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Location</th>
+                <th>Contact Number</th>
                 <th>Document</th>
                 <th>Status</th>
                 <th>Actions</th> <!-- New column for actions -->
@@ -24,6 +25,7 @@
                     <td>@jobApplicant.FirstName</td>
                     <td>@jobApplicant.LastName</td>
                     <td>@jobApplicant.Location</td>
+                    <td>@jobApplicant.PhoneNumber</td>
                     <td><a class="btn btn-outline-success" asp-action="DownloadDocument" asp-route-docFileName="@jobApplicant.DocFile"><i class="bi bi-cloud-arrow-down-fill"></i> Download Document</a></td>
                     <td id="status_@jobApplicant.JobApplicationId">@GetStatusText(jobApplicant.JobApplicationId)</td>
                     <td>

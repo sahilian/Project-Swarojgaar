@@ -12,11 +12,13 @@
 </div>
 
 
-<table class="table table-bordered table-hover" style="background-color: white">
-    <thead>
+<table class="table table-striped table-bordered table-hover" style="background-color: white">
+    <thead class="table-warning">
         <tr>
-            <th>Username</th>
+            <th>Name</th>
             <th>Email</th>
+            <th>Location</th>
+            <th>Contact Number</th>
             <th>Roles</th>
             <th>Action</th>
         </tr>
@@ -27,8 +29,10 @@
             @if (!await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 <tr>
-                    <td>@user.UserName</td>
+                    <td>@user.FirstName @user.LastName</td>
                     <td>@user.Email</td>
+                    <td>@user.Location</td>
+                    <td>@user.PhoneNumber</td>
                     <td>
                         @foreach (var role in await _userManager.GetRolesAsync(user))
                         {

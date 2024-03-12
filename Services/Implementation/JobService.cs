@@ -104,6 +104,7 @@ public class JobService : IJobService
                         FirstName = applicationUser.FirstName,
                         LastName = applicationUser.LastName,
                         Location = applicationUser.Location,
+                        PhoneNumber = applicationUser.PhoneNumber,
                         DocFile = applicationUser.DocFile,
                         // Add other user details as needed
                     };

@@ -2,6 +2,7 @@
 @using Swarojgaar.Data
 @model List<Swarojgaar.ViewModel.SavedJobVM.GetAllSavedJobsVM>
 @inject ApplicationDbContext _dbContext
+@inject Microsoft.AspNetCore.Identity.UserManager<User> UserManager
 
 @if (TempData["ResultOk"] != null)
 {
@@ -32,10 +33,19 @@
 
 @if (userSavedJobs.Any())
 {
-    <table class="table table-bordered table-hover" style="background-color: white">
+    <table class="table table-striped table-bordered table-hover" style="background-color: white">
 
-        <thead>
+        <thead class="table-warning">
             <tr>
+                <th>
+                    Organization
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Contact Number
+                </th>
                 <th>
                     Title
                 </th>
@@ -53,22 +63,36 @@
         <tbody>
             @foreach (var item in userSavedJobs)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Salary)
-                    </td>
-                    <td>
-                        <input type="hidden" name="savedJobId" value="@item.SavedJobId">
-                        <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-savedJobId="@item.SavedJobId" class="btn btn-success"><i class="far fa-check-circle"></i> Apply</a>
-                        <a asp-controller="SaveJob" asp-action="DeleteSavedJob" asp-route-savedJobId="@item.SavedJobId" class="btn btn-danger"><i class="far fa-trash-alt"></i> Delete</a>
-                    </td>
-                </tr>
+                var currentJob = await _dbContext.Jobs.FindAsync(item.JobId);
+                var currentCompany = await UserManager.FindByIdAsync(currentJob.UserId);
+                <try>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => currentCompany.FirstName)
+                            @Html.DisplayFor(modelItem => currentCompany.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => currentCompany.Location)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => currentCompany.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Salary)
+                        </td>
+                        <td>
+                            <input type="hidden" name="savedJobId" value="@item.SavedJobId">
+                            <a asp-controller="SaveJob" asp-action="ApplyAndRemove" asp-route-savedJobId="@item.SavedJobId" class="btn btn-success"><i class="far fa-check-circle"></i> Apply</a>
+                            <a asp-controller="SaveJob" asp-action="DeleteSavedJob" asp-route-savedJobId="@item.SavedJobId" class="btn btn-danger"><i class="far fa-trash-alt"></i> Delete</a>
+                        </td>
+                    </tr>
+                </try>
             }
         </tbody>
     </table>

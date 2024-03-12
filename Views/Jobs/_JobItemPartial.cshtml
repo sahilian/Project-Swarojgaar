@@ -1,13 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Swarojgaar.Data
 @model X.PagedList.IPagedList<Swarojgaar.ViewModel.JobVM.GetAllJobsVM>
+@inject ApplicationDbContext _dbContext
+@inject Microsoft.AspNetCore.Identity.UserManager<User> UserManager
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <div class="row">
     @foreach (var item in Model)
     {
+        var currentPoster = UserManager.FindByIdAsync(item.UserId).Result;
+
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
             <div class="box-part text-center">
                 <h1>🔥</h1>
+                <div class="text text-success">
+                    <h5>@Html.DisplayFor(modelItem => currentPoster.FirstName) @Html.DisplayFor(modelItem => currentPoster.LastName)</h5>
+                </div>
                 <div class="title">
                     <h4>@Html.DisplayFor(modelItem => item.Title)</h4>
                 </div>

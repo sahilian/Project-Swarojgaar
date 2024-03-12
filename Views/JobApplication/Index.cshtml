@@ -1,6 +1,8 @@
 ﻿@using System.Security.Claims
+@using Swarojgaar.Data
 @model List<Swarojgaar.ViewModel.JobApplicationVM.GetAllJobApplicationsVM>
-
+@inject Microsoft.AspNetCore.Identity.UserManager<User> UserManager
+@inject ApplicationDbContext _dbContext
 @if (TempData["ResultOk"] != null)
 {
     <script src="/lib/jquery/dist/jquery.js"></script>
@@ -42,15 +44,24 @@
 <div class="alert alert-success" style="margin-left: 12px; text-align: center">
     <h2>List of your applied jobs:</h2>
     <h2 class="btn btn-primary">Total Jobs Applied: @userAppliedJobs.Count</h2>
-    <h2 class="btn btn-success">Shortlisted Jobs: @userAppliedJobs.Count(u=> u.ApplicationStatus == 1)</h2>
+    <h2 class="btn btn-success">Shortlisted Jobs: @userAppliedJobs.Count(u => u.ApplicationStatus == 1)</h2>
     <h2 class="btn btn-warning">Pending Jobs: @userAppliedJobs.Count(u => u.ApplicationStatus == 0)</h2>
     <h2 class="btn btn-danger">Rejected Jobs: @userAppliedJobs.Count(u => u.ApplicationStatus == 2)</h2>
 </div>
 @if (userAppliedJobs.Any())
 {
-    <table class="table table-bordered table-hover" style="background-color: white">
-        <thead>
+    <table class="table table-striped table-bordered table-hover" style="background-color: white">
+        <thead class="table-warning">
             <tr>
+                <th>
+                    Organization
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Contact Number
+                </th>
                 <th>
                     Title
                 </th>
@@ -68,7 +79,19 @@
         <tbody>
             @foreach (var item in userAppliedJobs)
             {
+                var currentJob = await _dbContext.Jobs.FindAsync(item.JobId);
+                var currentCompany = await UserManager.FindByIdAsync(currentJob.UserId);
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => currentCompany.FirstName)
+                        @Html.DisplayFor(modelItem => currentCompany.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => currentCompany.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => currentCompany.PhoneNumber)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Title)
                     </td>

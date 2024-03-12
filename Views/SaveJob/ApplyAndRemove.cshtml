@@ -1,15 +1,40 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Swarojgaar.Data
 @model Swarojgaar.ViewModel.SavedJobVM.SavedJobDetailVM
+@inject ApplicationDbContext _dbContext
+@inject Microsoft.AspNetCore.Identity.UserManager<User> UserManager
 
 @{
     ViewData["Title"] = "GetDetails";
 }
 
 <h1>Apply to @Html.DisplayFor(model => model.Title)?</h1>
-
+@{
+    var currentJob = await _dbContext.Jobs.FindAsync(Model.JobId);
+    var currentCompany = await UserManager.FindByIdAsync(currentJob.UserId);
+}
 <div>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">
+            Organization
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => currentCompany.FirstName)
+            @Html.DisplayFor(model => currentCompany.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            Location
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => currentCompany.Location)
+        </dd>
+        <dt class="col-sm-2">
+            Contact Number
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => currentCompany.PhoneNumber)
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>

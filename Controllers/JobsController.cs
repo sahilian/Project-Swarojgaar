@@ -206,10 +206,17 @@ namespace Swarojgaar.Controllers
         // POST: Jobs/Edit/5
 
         [HttpPost]
-        public IActionResult Edit(EditJobVM editViewModel)
+        public async Task<IActionResult> Edit(EditJobVM editViewModel)
         {
-            var userId = _userManager.GetUserId(User);
-            editViewModel.UserId = userId;
+            //var userId = _userManager.GetUserId(User);
+            //editViewModel.UserId = userId;
+
+            var currentJob = await _dbContext.Jobs.FindAsync(editViewModel.JobId);
+
+            // Detach the currentJob from the context
+            _dbContext.Entry(currentJob).State = EntityState.Detached;
+
+            editViewModel.UserId = currentJob.UserId;
             _jobService.EditJob(editViewModel);
             TempData["ResultOk"] = "Data Updated Successfully !";
             return RedirectToAction("Index", "Jobs");
