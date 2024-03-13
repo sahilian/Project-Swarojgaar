@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="jobForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-3">
                 <label asp-for="Title" class="control-label"></label>
@@ -20,7 +20,8 @@
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Description" class="control-label"></label>
-                <textarea class="form-control" asp-for="Description" id="editor" rows="3"></textarea>
+                <div class="form-control" id="editor" style="height: 200px;"></div>
+                <input type="hidden" asp-for="Description" id="hiddenDescription" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
@@ -34,51 +35,39 @@
                 <span asp-validation-for="ExpiryDate" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <input type="submit" value="Create" class="btn btn-primary" id="button" />
+                <input type="submit" value="Create" class="btn btn-primary" id="submitButton" />
                 <a asp-action="Index" class="btn btn-warning">Back to List</a>
-
             </div>
         </form>
     </div>
 </div>
 
-<script>
-    const quill = new Quill('#editor', {
-        modules: {
-            toolbar: [
-                ['bold', 'italic'],
-                ['link', 'blockquote', 'code-block', 'image'],
-                [{ list: 'ordered' }, { list: 'bullet' }],
-            ],
-        },
-        theme: 'snow', //here i am using the quill's snow theme for toolbar
-    });
-
-    const btn = document.getElementById('button');
-
-    document.getElementById('form').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-
-        const data = {
-            description: quill.root.innerHTML,
-        };
-
-        fetch('/Jobs/Create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(result => {
-                window.location.href = '/Jobs';
-            })
-    });
-</script>
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        const quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    ['bold', 'italic'],
+                    ['link', 'blockquote', 'code-block', 'image'],
+                    [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+            },
+            theme: 'snow'
+        });
+
+        // Prevent form submission until description is populated
+        document.getElementById('jobForm').addEventListener('submit', function (event) {
+            const descriptionField = document.getElementById('hiddenDescription');
+            if (descriptionField.value === "") {
+                event.preventDefault();
+                alert("Please enter a job description."); // Or display a more informative message
+            }
+        });
+
+        // Update hidden field value on text change in Quill editor
+        quill.on('text-change', function (delta, source) {
+            const htmlContent = quill.root.innerHTML;
+            document.getElementById('hiddenDescription').value = htmlContent;
+        });
+    </script>
 }

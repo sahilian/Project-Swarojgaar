@@ -1,47 +1,53 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Swarojgaar.Data
 @model Swarojgaar.ViewModel.JobVM.DetailsJobVM
+@inject ApplicationDbContext _dbContext
+@inject Microsoft.AspNetCore.Identity.UserManager<User> UserManager
 
 @{
     ViewData["Title"] = "GetDetails";
 }
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <h1>Save this job!</h1>
+<hr />
+@{
+    var currentJob = await _dbContext.Jobs.FindAsync(Model.JobId);
+    var currentCompany = await UserManager.FindByIdAsync(currentJob.UserId);
+}
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Salary)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Salary)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ExpiryDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FormattedExpiryDate)
-        </dd>
-    </dl>
+<div class="container mt-4">
+    <div class="card">
+        <h5 class="card-header bg-primary text-white">Job Details for @Html.DisplayFor(model => model.Title)</h5>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Organization:</dt>
+                <dd class="col-sm-9">@currentCompany.FirstName @currentCompany.LastName</dd>
+                <dt class="col-sm-3">Location:</dt>
+                <dd class="col-sm-9">@currentCompany.Location</dd>
+                <dt class="col-sm-3">Contact Number:</dt>
+                <dd class="col-sm-9">@currentCompany.PhoneNumber</dd>
+                <dt class="col-sm-3">Email:</dt>
+                <dd class="col-sm-9">@currentCompany.Email</dd>
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Title):</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Title)</dd>
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description):</dt>
+                <dd class="col-sm-9">
+                    <div class="job-description">
+                        @Html.Raw(Model.Description) <!-- Render the HTML content of the description -->
+                    </div>
+                </dd>
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Salary):</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Salary)</dd>
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ExpiryDate):</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.FormattedExpiryDate)</dd>
+            </dl>
+            <div class="text-center">
+                <form method="post" asp-controller="SaveJob" asp-action="SaveJob">
+                    <input type="hidden" asp-for="JobId" />
+                    <button type="submit" asp-route-id="@Model?.EncryptedJobId" class="btn btn-success"><i class="bi bi-bookmark"></i> Save</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-warning"><i class="bi bi-box-arrow-left"></i> Back to List</a>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<form method="post" asp-controller="SaveJob" asp-action="SaveJob">
-    <input type="hidden" asp-for="JobId" />
-    <input type="submit" value="Save" asp-route-id="@Model?.EncryptedJobId" class="btn btn-success" />
-    <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to List</a>
-</form>
-@* <div>
-    <a asp-controller="SaveJob" asp-action="SaveJob" asp-route-id="@Model?.JobId" class="btn btn-success">Save</a>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back to List</a>
-</div> *@

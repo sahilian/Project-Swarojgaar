@@ -12,6 +12,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Location</th>
+                <th>Email</th>
                 <th>Contact Number</th>
                 <th>Document</th>
                 <th>Status</th>
@@ -21,10 +22,12 @@
         <tbody>
             @foreach (var jobApplicant in Model)
             {
+                var currentApplicant = await _dbContext.Users.FindAsync(jobApplicant.UserId);
                 <tr>
                     <td>@jobApplicant.FirstName</td>
                     <td>@jobApplicant.LastName</td>
                     <td>@jobApplicant.Location</td>
+                    <td>@currentApplicant.Email</td>
                     <td>@jobApplicant.PhoneNumber</td>
                     <td><a class="btn btn-outline-success" asp-action="DownloadDocument" asp-route-docFileName="@jobApplicant.DocFile"><i class="bi bi-cloud-arrow-down-fill"></i> Download Document</a></td>
                     <td id="status_@jobApplicant.JobApplicationId">@GetStatusText(jobApplicant.JobApplicationId)</td>
@@ -47,7 +50,7 @@ else
     // Helper function to get status text based on status code
     string GetStatusText(int applicationId)
     {
-        
+
         var status = GetStatusFromDatabase(applicationId);
 
         switch (status)

@@ -60,6 +60,9 @@
                     Location
                 </th>
                 <th>
+                    Email
+                </th>
+                <th>
                     Contact Number
                 </th>
                 <th>
@@ -83,11 +86,13 @@
                 var currentCompany = await UserManager.FindByIdAsync(currentJob.UserId);
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => currentCompany.FirstName)
-                        @Html.DisplayFor(modelItem => currentCompany.LastName)
+                        @Html.DisplayFor(modelItem => currentCompany.FirstName) @Html.DisplayFor(modelItem => currentCompany.LastName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => currentCompany.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => currentCompany.Email)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => currentCompany.PhoneNumber)
