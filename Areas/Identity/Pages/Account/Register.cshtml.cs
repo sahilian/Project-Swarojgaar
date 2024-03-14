@@ -123,6 +123,13 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
 
+            //Profile Image or Logo
+            public string IdentityImage { get; set; }
+            [Required]
+            [Display(Name = "Upload Your Identity Image")]
+            public IFormFile IdentityFormFile { get; set; }
+
+            //Document's upload
             public string DocFile { get; set; }
             [Required]
             [Display(Name = "Upload Your Document")]
@@ -171,7 +178,7 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
                 user.PhoneNumber = Input.PhoneNumber;
                 user.Location = Input.Location;
 
-                // Handle file upload
+                // Handle document file upload
                 if (Input.DocFormFile != null && Input.DocFormFile.Length > 0)
                 {
                     // Generate unique file name
@@ -187,6 +194,24 @@ namespace Swarojgaar.Areas.Identity.Pages.Account
 
                     // Save file path to user's property
                     user.DocFile = fileName; // Or you can save the full path
+                }
+
+                // Handle profile image upload
+                if (Input.IdentityFormFile != null && Input.IdentityFormFile.Length > 0)
+                {
+                    // Generate unique file name
+                    var imageFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(Input.IdentityFormFile.FileName);
+                    // Define upload path (you may need to adjust this to your project structure)
+                    var imageUploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profile", imageFileName);
+
+                    // Save file to disk
+                    using (var stream = new FileStream(imageUploadPath, FileMode.Create))
+                    {
+                        await Input.IdentityFormFile.CopyToAsync(stream);
+                    }
+
+                    // Save file path to user's property
+                    user.IdentityImage = imageFileName; // Or you can save the full path
                 }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

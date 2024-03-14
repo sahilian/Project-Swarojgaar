@@ -95,12 +95,19 @@
                     <label asp-for="Input.ConfirmPassword"></label>
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.IdentityFormFile" type="file" class="form-control" />
+                    <label asp-for="Input.IdentityFormFile" id="imageLabel" class="control-label"></label>
+                    <span asp-validation-for="Input.IdentityFormFile" class="text-danger"></span>
+                </div>
+                
                 <div class="form-floating mb-3">
                     <input asp-for="Input.DocFormFile" type="file" class="form-control" />
                     <label asp-for="Input.DocFormFile" id="docLabel" class="control-label"></label>
                     <span asp-validation-for="Input.DocFormFile" class="text-danger"></span>
                 </div>
-@*                 <div class="form-floating mb-3">
+                @*                 <div class="form-floating mb-3">
                     <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" aria-required="true">
                         <option value="">Select Role</option>
                     </select>
@@ -128,10 +135,14 @@ else
             document.getElementById("firstNameLabel").textContent = "Company Name";
             document.getElementById("lastNameLabel").textContent = "Company Type";
             document.getElementById("docLabel").textContent = "Upload Company PAN Document";
+            document.getElementById("imageLabel").textContent = "Upload Company Logo";
+
         } else {
             document.getElementById("firstNameLabel").textContent = "First Name";
             document.getElementById("lastNameLabel").textContent = "Last Name";
             document.getElementById("docLabel").textContent = "Upload Your Resume";
+            document.getElementById("imageLabel").textContent = "Upload Your Profile Picture";
+
         }
     }
 </script>

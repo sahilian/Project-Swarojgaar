@@ -2,9 +2,10 @@
 @using Microsoft.AspNetCore.Identity
 @model List<Swarojgaar.ViewModel.JobVM.GetAllJobsVM>
 @using Microsoft.AspNetCore.Identity
+@using Swarojgaar.Data
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
-
+@inject ApplicationDbContext _dbContext
 @{
     ViewData["Title"] = "Home";
 }
@@ -43,55 +44,53 @@
 
 <div class="d-flex align-items-center">
     <h1 style="margin-left: 12px; margin-right: 10px">Hot Jobs🔥</h1>
-    <form id="searchForm" class="d-flex">
-        <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search Jobs" aria-label="Search" name="search_item" style="height: 2.7em; width: 400px">
-        <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> Search</button>
-    </form>
-</div>
+    <div class="search-container d-flex align-items-center">
+        <form id="searchForm" class="d-flex me-3">
+            <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search Jobs" aria-label="Search" name="search_item" style="height: 2.7em; width: 400px">
+            <button id="searchButton" class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> Search</button>
+        </form>
 
+        <div class="dropdown">
+            <button class="btn btn-success dropdown-toggle" type="button" id="categoryDropdown" style="height: 2.7em;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Category
+            </button>
+            <div class="dropdown-menu" aria-labelledby="categoryDropdown">
+                <a class="dropdown-item" href="#" data-category-id="0">All Jobs</a>
+                @foreach (var category in _dbContext.Categories)
+                {
+                    <a class="dropdown-item" href="#" data-category-id="@category.CategoryId">@category.CategoryName</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="jobListContainer">
     @await Html.PartialAsync("_JobListPartial", Model)
 </div>
 <script src="lib/jquery/dist/jquery.min.js"></script>
-@* <script>
+<script>
     $(document).ready(function () {
-        $("#searchForm").submit(function (e) {
-            e.preventDefault();
-            searchJobs();
+        $('#categoryDropdown').on('click', function () {
+            $(this).next('.dropdown-menu').toggle();
         });
-
-        function searchJobs() {
-            var searchItem = $("#searchInput").val();
-
-            $.ajax({
-                url: "/Home/SearchJobs",
-                data: { search_item: searchItem },
-                type: "GET",
-                success: function (result) {
-                    $("#jobListContainer").html(result);
-                },
-                error: function (error) {
-                    console.error("Error searching jobs: " + error.responseText);
-                }
-            });
-        }
     });
-
-</script> *@
-
+</script>
 <script>
     $(document).ready(function () {
         $("#searchInput").on("input", function () {
             searchJobs();
         });
 
-        function searchJobs() {
+        function searchJobs(categoryId = null) {
             var searchItem = $("#searchInput").val();
 
             $.ajax({
                 url: "/Home/SearchJobs",
-                data: { search_item: searchItem },
+                data: {
+                    search_item: searchItem,
+                    categoryId: categoryId
+                },
                 type: "GET",
                 success: function (result) {
                     $("#jobListContainer").html(result);
@@ -101,6 +100,12 @@
                 }
             });
         }
-    });
 
+        $('.dropdown-menu a.dropdown-item').click(function (e) {
+            e.preventDefault(); // Prevent the default link behavior
+
+            var categoryId = $(this).data('category-id');
+            searchJobs(categoryId);
+        });
+    });
 </script>

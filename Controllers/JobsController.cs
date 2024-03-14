@@ -178,8 +178,8 @@ namespace Swarojgaar.Controllers
                 Text = c.CategoryName
             }).ToList();
 
-            // Add an empty option as the default option
-            categories.Insert(0, new SelectListItem { Value = "", Text = "---None---" });
+            //// Add an empty option as the default option
+            //categories.Insert(0, new SelectListItem { Value = "", Text = "---None---" });
 
             // Pass the list of categories to the view using ViewBag
             ViewBag.Categories = categories;
@@ -220,8 +220,8 @@ namespace Swarojgaar.Controllers
                 Text = c.CategoryName
             }).ToList();
 
-            // Add an empty option as the default option
-            categories.Insert(0, new SelectListItem { Value = "", Text = "---None---" });
+            //// Add an empty option as the default option
+            //categories.Insert(0, new SelectListItem { Value = "", Text = "---None---" });
 
             // Pass the list of categories to the view using ViewBag
             ViewBag.Categories = categories;

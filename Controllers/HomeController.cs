@@ -5,6 +5,9 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.DataProtection;
 using Swarojgaar.Security;
 using Swarojgaar.ViewModel.JobVM;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Swarojgaar.Data;
 
 namespace Swarojgaar.Controllers
 {
@@ -13,43 +16,55 @@ namespace Swarojgaar.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IJobService _jobService;
         private readonly IDataProtector protector;
-
+        private readonly ApplicationDbContext _dbContext;
         public HomeController(ILogger<HomeController> logger, 
             IJobService jobService, 
             IDataProtectionProvider dataProtectionProvider, 
-            DataProtectionPurposeStrings dataProtectionPurposeStrings
-            )
+            DataProtectionPurposeStrings dataProtectionPurposeStrings, ApplicationDbContext dbContext)
         {
             _logger = logger;
             _jobService = jobService;
+            _dbContext = dbContext;
             protector = dataProtectionProvider
                 .CreateProtector(dataProtectionPurposeStrings.JobIdRouteValue);
         }
 
         [HttpGet]
 
-        public IActionResult SearchJobs(string search_item)
+        public IActionResult SearchJobs(string search_item, int? categoryId)
         {
             var allJobs = _jobService.GetAllJobs();
 
-            if (string.IsNullOrEmpty(search_item))
-                return PartialView("_JobListPartial", allJobs);
+            // Filter by search term
+            if (!string.IsNullOrEmpty(search_item))
+            {
+                var searchTermLower = search_item.ToLower();
+                allJobs = allJobs.Where(j => j.Title.ToLower().Contains(searchTermLower)).ToList();
+            }
 
-            var searchTermLower = search_item.ToLower();
+            // Filter by category
+            if (categoryId.HasValue && categoryId.Value != 0)
+            {
+                allJobs = allJobs.Where(j => j.CategoryId == categoryId.Value).ToList();
+            }
 
-            var results = allJobs.Where(j =>
-                j.Title.ToLower().Contains(searchTermLower)).ToList();
-
-            if (results.Count == 0)
+            if (allJobs.Count == 0)
             {
                 ViewBag.Message = "No Jobs Found!";
             }
-            return PartialView("_JobListPartial", results);
+
+            return PartialView("_JobListPartial", allJobs);
         }
 
         public IActionResult Index()
         {
             var allJobs = _jobService.GetAllJobs();
+            ViewBag.Categories = _dbContext.Categories.Select(c => new SelectListItem
+            {
+                Value = c.CategoryId.ToString(),
+                Text = c.CategoryName
+            }).ToList();
+
             return View(allJobs);
         }
         public IActionResult Detail(string id)
