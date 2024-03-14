@@ -20,6 +20,8 @@ namespace Swarojgaar.Models
         public string Title { get; set; }
 
         public string Description { get; set; }
+        public string JobSummary { get; set; }
+
 
         public double Salary { get; set; }
 

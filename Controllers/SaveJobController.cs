@@ -70,6 +70,7 @@ namespace Swarojgaar.Controllers
                 {
                     UserId = userId,
                     Title = jobDetails.Title,
+                    JobSummary = jobDetails.JobSummary,
                     Description = jobDetails.Description,
                     Salary = jobDetails.Salary,
                     ExpiryDate = jobDetails.ExpiryDate,
@@ -123,6 +124,7 @@ namespace Swarojgaar.Controllers
                 {
                     UserId = userId,
                     Title = jobDetails.Title,
+                    JobSummary = jobDetails.JobSummary,
                     Description = jobDetails.Description,
                     Salary = jobDetails.Salary,
                     ExpiryDate = jobDetails.ExpiryDate,

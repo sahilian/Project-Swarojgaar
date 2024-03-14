@@ -1,4 +1,4 @@
-﻿@model Swarojgaar.Models.Job
+﻿@model Swarojgaar.ViewModel.JobVM.CreateJobVM
 
 @{
     ViewData["Title"] = "CreateJob";
@@ -30,6 +30,11 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
+                <label asp-for="JobSummary" class="control-label"></label>
+                <input asp-for="JobSummary" class="form-control" />
+                <span asp-validation-for="JobSummary" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
                 <label asp-for="Description" class="control-label"></label>
                 <div class="form-control" id="editor" style="height: 200px;"></div>
                 <input type="hidden" asp-for="Description" id="hiddenDescription" />
@@ -42,7 +47,7 @@
             </div>
             <div class="form-group mb-3">
                 <label asp-for="ExpiryDate" class="control-label"></label>
-                <input asp-for="ExpiryDate" class="form-control" />
+                <input asp-for="ExpiryDate" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" type="datetime-local" />
                 <span asp-validation-for="ExpiryDate" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
@@ -80,5 +85,7 @@
             const htmlContent = quill.root.innerHTML;
             document.getElementById('hiddenDescription').value = htmlContent;
         });
+
+
     </script>
 }

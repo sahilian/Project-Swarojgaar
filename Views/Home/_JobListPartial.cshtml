@@ -38,7 +38,7 @@
                     <h3>@Html.DisplayFor(modelItem => item.Title)</h3>
                 </div>
                 <div class="text">
-                    <span>@Html.Raw(item.Description)</span>
+                    <span>@Html.DisplayFor(modelItem => item.JobSummary)</span>
                 </div>
                 <div role="group" class="w-60 btn-group">
                     @if (User.Identity.IsAuthenticated)

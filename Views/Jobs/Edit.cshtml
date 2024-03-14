@@ -28,6 +28,11 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
+                <label asp-for="JobSummary" class="control-label"></label>
+                <input asp-for="JobSummary" class="form-control" />
+                <span asp-validation-for="JobSummary" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
                 <label asp-for="Description" class="control-label"></label>
                 <div class="form-control" id="editor" style="height: 200px;"></div>
                 <input type="hidden" asp-for="Description" id="hiddenDescription" />

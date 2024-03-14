@@ -23,6 +23,8 @@ namespace Swarojgaar.Models
 
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
+        public string JobSummary { get; set; }
+
 
         [Required(ErrorMessage = "Salary is required")]
         [Range(0, double.MaxValue, ErrorMessage = "Salary must be a non-negative value")]

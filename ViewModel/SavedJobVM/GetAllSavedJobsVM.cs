@@ -12,6 +12,8 @@ namespace Swarojgaar.ViewModel.SavedJobVM
         public int JobId { get; set; }
         public Job Job { get; set; }
         public string Title { get; set; }
+        public string JobSummary { get; set; }
+
         public string Description { get; set; }
 
         public string UserId { get; set; }

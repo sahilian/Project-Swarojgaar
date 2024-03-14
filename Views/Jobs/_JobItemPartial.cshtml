@@ -12,7 +12,7 @@
         var currentPoster = UserManager.FindByIdAsync(item.UserId).Result;
 
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-            <div class="box-part text-center">
+            <div class="box-part text-center cards rounded-3">
                 <img src="/profile/@currentPoster.IdentityImage" style="height: 60px; width: 60px; object-fit: cover; border-radius: 50%;" />
                 <div class="text text-success">
                     <h5>@Html.DisplayFor(modelItem => currentPoster.FirstName) @Html.DisplayFor(modelItem => currentPoster.LastName)</h5>
@@ -21,7 +21,7 @@
                     <h4>@Html.DisplayFor(modelItem => item.Title)</h4>
                 </div>
                 <div class="text">
-                    <span>@Html.Raw(item.Description)</span>
+                    <span>@Html.DisplayFor(modelItem => item.JobSummary)</span>
                 </div>
                 <div role="group" class="w-60 btn-group">
                     <a asp-action="Edit" asp-route-id="@item.EncryptedJobId" class="btn btn-primary mx-1 rounded"><i class="far fa-edit"></i> Edit</a>

@@ -17,6 +17,11 @@ namespace Swarojgaar.ViewModel.JobVM
         public string Title { get; set; }
         public IEnumerable<Category> Categories { get; set; }
         public int CategoryId { get; set; }
+        [Display(Name = "Job Summary")]
+        [MaxLength(60, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        [Required(ErrorMessage = "Job Summary is required.")]
+        public string JobSummary { get; set; }
+
         public string Description { get; set; }
         public double Salary { get; set; }
         public DateTime ExpiryDate { get; set; }
