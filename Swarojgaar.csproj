@@ -46,10 +46,20 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\JobApplication\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Category\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Category\Edit.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Category\Create.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Category\Edit.cshtml" />
   </ItemGroup>
 
 </Project>

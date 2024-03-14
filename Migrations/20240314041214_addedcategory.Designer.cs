@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Swarojgaar.Data;
 
@@ -11,9 +12,10 @@ using Swarojgaar.Data;
 namespace Swarojgaar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240314041214_addedcategory")]
+    partial class addedcategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,21 +54,21 @@ namespace Swarojgaar.Migrations
                         new
                         {
                             Id = "65c00570-b09f-4c8b-a412-eea238c829b7",
-                            ConcurrencyStamp = "9291dfcc-d028-4133-9c73-35659a3d1f0f",
+                            ConcurrencyStamp = "11396976-70a0-4b1c-b51b-72005d83a0f3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "64a99865-2144-4979-942e-71a8540d5061",
-                            ConcurrencyStamp = "4eb7e305-7678-4701-9549-e7742fa10202",
+                            ConcurrencyStamp = "c906a00f-6199-409c-9dfc-2dfef2e504cb",
                             Name = "Job_Provider",
                             NormalizedName = "JOB_PROVIDER"
                         },
                         new
                         {
                             Id = "d959fac3-736d-437f-b467-00bce9b64a65",
-                            ConcurrencyStamp = "a4f4d0e7-2533-455c-b43e-fb3da98bfd68",
+                            ConcurrencyStamp = "1f6d0abc-0a50-4acb-bbb6-cd688deff22f",
                             Name = "Job_Seeker",
                             NormalizedName = "JOB_SEEKER"
                         });
@@ -161,7 +163,7 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "8a20a084-b681-4d27-bf5f-d19025709c3a",
+                            UserId = "9f7f2665-eba0-4470-94b9-6b60fa3737cd",
                             RoleId = "65c00570-b09f-4c8b-a412-eea238c829b7"
                         });
                 });
@@ -210,9 +212,6 @@ namespace Swarojgaar.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobId"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -232,8 +231,6 @@ namespace Swarojgaar.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("JobId");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -403,9 +400,9 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8a20a084-b681-4d27-bf5f-d19025709c3a",
+                            Id = "9f7f2665-eba0-4470-94b9-6b60fa3737cd",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1d980d54-2df9-4969-9a7f-daa7f6dd30ae",
+                            ConcurrencyStamp = "2327eea1-567f-4852-9157-2155d62a02bc",
                             DocFile = "",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
@@ -415,7 +412,7 @@ namespace Swarojgaar.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMiE35fyoCHsVO88QQAKx9BqrK+x3kuqAVAOLvu1YZXxViLlrYK42DEkIzFD7U10ng==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHzP7mkhph/mEXZAlOxAq5ncqhVNOuy4DHtvvIUiQ91EmQuDlnPZzAq6NuqmgLp0ug==",
                             PhoneNumber = "",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "UniqueSecurityStamp",
@@ -477,19 +474,11 @@ namespace Swarojgaar.Migrations
 
             modelBuilder.Entity("Swarojgaar.Models.Job", b =>
                 {
-                    b.HasOne("Swarojgaar.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Swarojgaar.Models.User", "User")
                         .WithMany("Jobs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });

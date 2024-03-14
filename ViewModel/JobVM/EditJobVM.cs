@@ -1,4 +1,5 @@
-﻿using Swarojgaar.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Swarojgaar.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +15,8 @@ namespace Swarojgaar.ViewModel.JobVM
         public string UserId { get; set; }
         public User User { get; set; }
         public string Title { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
+        public int CategoryId { get; set; }
         public string Description { get; set; }
         public double Salary { get; set; }
         public DateTime ExpiryDate { get; set; }

@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model Category
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <h2>Create New Category</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="CategoryName" class="form-control" aria-required="true" />
+                <label asp-for="CategoryName"></label>
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>

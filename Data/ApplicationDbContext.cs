@@ -12,6 +12,7 @@ namespace Swarojgaar.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<SavedJob> SavedJobs { get; set; }

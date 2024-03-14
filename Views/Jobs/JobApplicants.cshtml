@@ -2,43 +2,54 @@
 @inject Swarojgaar.Data.ApplicationDbContext _dbContext
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<h2>Job Applicants</h2>
 
 @if (Model.Count > 0)
 {
-    <table class="table table-striped table-bordered table-hover" style="background-color: white">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Location</th>
-                <th>Email</th>
-                <th>Contact Number</th>
-                <th>Document</th>
-                <th>Status</th>
-                <th>Actions</th> <!-- New column for actions -->
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var jobApplicant in Model)
-            {
-                var currentApplicant = await _dbContext.Users.FindAsync(jobApplicant.UserId);
+   
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Job Applicants</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered table-hover" style="background-color: white">
+                <thead>
+
                 <tr>
-                    <td>@jobApplicant.FirstName</td>
-                    <td>@jobApplicant.LastName</td>
-                    <td>@jobApplicant.Location</td>
-                    <td>@currentApplicant.Email</td>
-                    <td>@jobApplicant.PhoneNumber</td>
-                    <td><a class="btn btn-outline-success" asp-action="DownloadDocument" asp-route-docFileName="@jobApplicant.DocFile"><i class="bi bi-cloud-arrow-down-fill"></i> Download Document</a></td>
-                    <td id="status_@jobApplicant.JobApplicationId">@GetStatusText(jobApplicant.JobApplicationId)</td>
-                    <td>
-                        <button type="button" class="btn btn-success" onclick="updateStatus(@jobApplicant.JobApplicationId, 1)"><i class="bi bi-check-circle"></i> Shortlist</button>
-                        <button type="button" class="btn btn-danger" onclick="updateStatus(@jobApplicant.JobApplicationId, 2)"><i class="bi bi-x-circle"></i> Reject</button>
-                    </td>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Location</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>Document</th>
+                    <th>Status</th>
+                    <th>Actions</th> <!-- New column for actions -->
                 </tr>
-            }
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                @foreach (var jobApplicant in Model)
+                {
+                    var currentApplicant = await _dbContext.Users.FindAsync(jobApplicant.UserId);
+                    <tr>
+                        <td>@jobApplicant.FirstName</td>
+                        <td>@jobApplicant.LastName</td>
+                        <td>@jobApplicant.Location</td>
+                        <td>@currentApplicant.Email</td>
+                        <td>@jobApplicant.PhoneNumber</td>
+                        <td><a class="btn btn-outline-success" asp-action="DownloadDocument" asp-route-docFileName="@jobApplicant.DocFile"><i class="bi bi-cloud-arrow-down-fill"></i> Download Document</a></td>
+                        <td id="status_@jobApplicant.JobApplicationId">@GetStatusText(jobApplicant.JobApplicationId)</td>
+                        <td>
+                            <button type="button" class="btn btn-success" onclick="updateStatus(@jobApplicant.JobApplicationId, 1)"><i class="bi bi-check-circle"></i> Shortlist</button>
+                            <button type="button" class="btn btn-danger" onclick="updateStatus(@jobApplicant.JobApplicationId, 2)"><i class="bi bi-x-circle"></i> Reject</button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+       
+            
+        
 }
 else
 {

@@ -21,7 +21,7 @@
                     <h4>@Html.DisplayFor(modelItem => item.Title)</h4>
                 </div>
                 <div class="text">
-                    <span>@Html.DisplayFor(modelItem => item.Description)</span>
+                    <span>@Html.Raw(item.Description)</span>
                 </div>
                 <div role="group" class="w-60 btn-group">
                     <a asp-action="Edit" asp-route-id="@item.EncryptedJobId" class="btn btn-primary mx-1 rounded"><i class="far fa-edit"></i> Edit</a>

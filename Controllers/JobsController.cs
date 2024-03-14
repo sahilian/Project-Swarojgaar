@@ -12,6 +12,7 @@ using System.Net.NetworkInformation;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
 using Swarojgaar.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Swarojgaar.Controllers
 {
@@ -170,6 +171,18 @@ namespace Swarojgaar.Controllers
         // GET: Jobs/Create
         public IActionResult Create()
         {
+            // Retrieve categories from the database
+            var categories = _dbContext.Categories.Select(c => new SelectListItem
+            {
+                Value = c.CategoryId.ToString(),
+                Text = c.CategoryName
+            }).ToList();
+
+            // Add an empty option as the default option
+            categories.Insert(0, new SelectListItem { Value = "", Text = "---None---" });
+
+            // Pass the list of categories to the view using ViewBag
+            ViewBag.Categories = categories;
             return View();
         }
 
@@ -200,6 +213,18 @@ namespace Swarojgaar.Controllers
             {
                 return NotFound();
             }
+            // Retrieve categories from the database
+            var categories = _dbContext.Categories.Select(c => new SelectListItem
+            {
+                Value = c.CategoryId.ToString(),
+                Text = c.CategoryName
+            }).ToList();
+
+            // Add an empty option as the default option
+            categories.Insert(0, new SelectListItem { Value = "", Text = "---None---" });
+
+            // Pass the list of categories to the view using ViewBag
+            ViewBag.Categories = categories;
             return View(_jobService.EditJob(id));
         }
 

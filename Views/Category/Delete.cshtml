@@ -1,0 +1,10 @@
+﻿@model Category
+
+<h1>Confirm Delete</h1>
+
+<p>Are you sure you want to delete the category <strong>@Model.CategoryName</strong>?</p>
+
+<form asp-action="Delete" asp-route-id="@Model.CategoryId">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
