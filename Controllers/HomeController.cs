@@ -58,14 +58,32 @@ namespace Swarojgaar.Controllers
 
         public IActionResult Index()
         {
-            var allJobs = _jobService.GetAllJobs();
-            ViewBag.Categories = _dbContext.Categories.Select(c => new SelectListItem
+            try
             {
-                Value = c.CategoryId.ToString(),
-                Text = c.CategoryName
-            }).ToList();
+                // Get the current date
+                DateTime currentDate = DateTime.Now;
 
-            return View(allJobs);
+                // Filter out expired jobs
+                var activeJobs = _jobService.GetAllJobs()
+                    .Where(j => j.ExpiryDate >= currentDate)
+                    .ToList();
+
+                // Get categories for filtering
+                ViewBag.Categories = _dbContext.Categories
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CategoryId.ToString(),
+                        Text = c.CategoryName
+                    })
+                    .ToList();
+
+                return View(activeJobs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving active jobs.");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
         public IActionResult Detail(string id)
         {
