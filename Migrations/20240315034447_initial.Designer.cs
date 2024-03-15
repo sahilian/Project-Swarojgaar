@@ -12,8 +12,8 @@ using Swarojgaar.Data;
 namespace Swarojgaar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240314093338_add-profile-image")]
-    partial class addprofileimage
+    [Migration("20240315034447_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,21 +54,21 @@ namespace Swarojgaar.Migrations
                         new
                         {
                             Id = "65c00570-b09f-4c8b-a412-eea238c829b7",
-                            ConcurrencyStamp = "64dc85e2-0769-48ad-bda4-83e972a6e04d",
+                            ConcurrencyStamp = "db764c0f-d386-4ca3-a8e6-b4a7d3ec57b7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "64a99865-2144-4979-942e-71a8540d5061",
-                            ConcurrencyStamp = "9ec38a2d-8e8a-43e5-87a6-3ea19492c6a0",
+                            ConcurrencyStamp = "682411e7-61a6-4b3a-bb5e-361aeec7dd77",
                             Name = "Job_Provider",
                             NormalizedName = "JOB_PROVIDER"
                         },
                         new
                         {
                             Id = "d959fac3-736d-437f-b467-00bce9b64a65",
-                            ConcurrencyStamp = "dd4d3a00-e68d-4efc-8ec8-2d58661f60d1",
+                            ConcurrencyStamp = "2ee79860-ca85-4c13-8d18-5822db13f6cb",
                             Name = "Job_Seeker",
                             NormalizedName = "JOB_SEEKER"
                         });
@@ -163,7 +163,7 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "fe357059-f578-4e57-8757-24a94dee5d05",
+                            UserId = "57ae5d31-7b9d-41ce-bfb0-dbf7d285f5cc",
                             RoleId = "65c00570-b09f-4c8b-a412-eea238c829b7"
                         });
                 });
@@ -222,6 +222,11 @@ namespace Swarojgaar.Migrations
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("JobSummary")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
                     b.Property<double>("Salary")
                         .HasColumnType("float");
 
@@ -263,6 +268,10 @@ namespace Swarojgaar.Migrations
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
+                    b.Property<string>("JobSummary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Salary")
                         .HasColumnType("float");
 
@@ -300,6 +309,10 @@ namespace Swarojgaar.Migrations
 
                     b.Property<int>("JobId")
                         .HasColumnType("int");
+
+                    b.Property<string>("JobSummary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Salary")
                         .HasColumnType("float");
@@ -409,9 +422,9 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fe357059-f578-4e57-8757-24a94dee5d05",
+                            Id = "57ae5d31-7b9d-41ce-bfb0-dbf7d285f5cc",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2fa2d893-cd1a-4470-915a-26270d4ef5ed",
+                            ConcurrencyStamp = "f95043dc-f612-4db9-bd1c-c2664a834a77",
                             DocFile = "",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
@@ -422,7 +435,7 @@ namespace Swarojgaar.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDcZ00NIVA+0yi1M7O9/pJNSePQqUZDJUA894TZvfAr+BSQCQCw7s4ivyI3C60vI+Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAJMNpw8o3JGx7ASQ6COTxMpH9TDhP9x980COI8jYU+4IhLMYtKSG0XNHy7Jl2gdBg==",
                             PhoneNumber = "9840030129",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "UniqueSecurityStamp",

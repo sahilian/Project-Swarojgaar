@@ -52,21 +52,21 @@ namespace Swarojgaar.Migrations
                         new
                         {
                             Id = "65c00570-b09f-4c8b-a412-eea238c829b7",
-                            ConcurrencyStamp = "5279e1bb-436e-4df4-ba78-d70eabae57b5",
+                            ConcurrencyStamp = "db764c0f-d386-4ca3-a8e6-b4a7d3ec57b7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "64a99865-2144-4979-942e-71a8540d5061",
-                            ConcurrencyStamp = "57124134-4ad9-4eec-8670-bf7b52c8db0f",
+                            ConcurrencyStamp = "682411e7-61a6-4b3a-bb5e-361aeec7dd77",
                             Name = "Job_Provider",
                             NormalizedName = "JOB_PROVIDER"
                         },
                         new
                         {
                             Id = "d959fac3-736d-437f-b467-00bce9b64a65",
-                            ConcurrencyStamp = "f6046610-43b6-40c3-91c6-a536e138d10b",
+                            ConcurrencyStamp = "2ee79860-ca85-4c13-8d18-5822db13f6cb",
                             Name = "Job_Seeker",
                             NormalizedName = "JOB_SEEKER"
                         });
@@ -161,7 +161,7 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "286f3cac-bd15-4c70-8910-94b18729ea07",
+                            UserId = "57ae5d31-7b9d-41ce-bfb0-dbf7d285f5cc",
                             RoleId = "65c00570-b09f-4c8b-a412-eea238c829b7"
                         });
                 });
@@ -420,9 +420,9 @@ namespace Swarojgaar.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "286f3cac-bd15-4c70-8910-94b18729ea07",
+                            Id = "57ae5d31-7b9d-41ce-bfb0-dbf7d285f5cc",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8c9d51ee-b902-4fcf-9eb7-b618a915c5e5",
+                            ConcurrencyStamp = "f95043dc-f612-4db9-bd1c-c2664a834a77",
                             DocFile = "",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
@@ -433,7 +433,7 @@ namespace Swarojgaar.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEF8eXDb2KfGTEsTI03vSyWmq3+y7ocrp1R00HsZjvB/OwWqOSB4IrRVkurEYGUQI6Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAJMNpw8o3JGx7ASQ6COTxMpH9TDhP9x980COI8jYU+4IhLMYtKSG0XNHy7Jl2gdBg==",
                             PhoneNumber = "9840030129",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "UniqueSecurityStamp",

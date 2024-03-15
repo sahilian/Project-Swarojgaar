@@ -32,6 +32,7 @@ namespace Swarojgaar.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdentityImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DocFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -50,6 +51,19 @@ namespace Swarojgaar.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,6 +180,8 @@ namespace Swarojgaar.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    JobSummary = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salary = table.Column<double>(type: "float", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -179,6 +195,12 @@ namespace Swarojgaar.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,6 +213,7 @@ namespace Swarojgaar.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobSummary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salary = table.Column<double>(type: "float", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ApplicationStatus = table.Column<int>(type: "int", nullable: false)
@@ -222,6 +245,7 @@ namespace Swarojgaar.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobSummary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salary = table.Column<double>(type: "float", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -247,20 +271,20 @@ namespace Swarojgaar.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "64a99865-2144-4979-942e-71a8540d5061", "a44acf94-f12e-4316-ba4d-7eac7b7c5402", "Job_Provider", "JOB_PROVIDER" },
-                    { "65c00570-b09f-4c8b-a412-eea238c829b7", "cff4e41c-e370-4e72-b19c-9bae062f208b", "Admin", "ADMIN" },
-                    { "d959fac3-736d-437f-b467-00bce9b64a65", "cdfedd88-a090-4d79-abc4-73db2d6cf1e7", "Job_Seeker", "JOB_SEEKER" }
+                    { "64a99865-2144-4979-942e-71a8540d5061", "682411e7-61a6-4b3a-bb5e-361aeec7dd77", "Job_Provider", "JOB_PROVIDER" },
+                    { "65c00570-b09f-4c8b-a412-eea238c829b7", "db764c0f-d386-4ca3-a8e6-b4a7d3ec57b7", "Admin", "ADMIN" },
+                    { "d959fac3-736d-437f-b467-00bce9b64a65", "2ee79860-ca85-4c13-8d18-5822db13f6cb", "Job_Seeker", "JOB_SEEKER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DocFile", "Email", "EmailConfirmed", "FirstName", "LastName", "Location", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "ba78b512-b78e-4d26-8705-6309cd643dc7", 0, "e2bfd687-0aaa-488f-9017-9654b85214ef", "", "admin@gmail.com", true, "Admin", "", "", false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEM2qTXxP+ohnQJAnzAJVSE3NDZrLzWYSYsjFvUeHymzwFW4HN4gnKDI1qc7mQ/RCGQ==", "", false, "UniqueSecurityStamp", false, "admin@gmail.com" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DocFile", "Email", "EmailConfirmed", "FirstName", "IdentityImage", "LastName", "Location", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "57ae5d31-7b9d-41ce-bfb0-dbf7d285f5cc", 0, "f95043dc-f612-4db9-bd1c-c2664a834a77", "", "admin@gmail.com", true, "Admin", "1516929476300.jpeg", "", "Nepal", false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEAJMNpw8o3JGx7ASQ6COTxMpH9TDhP9x980COI8jYU+4IhLMYtKSG0XNHy7Jl2gdBg==", "9840030129", false, "UniqueSecurityStamp", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "65c00570-b09f-4c8b-a412-eea238c829b7", "ba78b512-b78e-4d26-8705-6309cd643dc7" });
+                values: new object[] { "65c00570-b09f-4c8b-a412-eea238c829b7", "57ae5d31-7b9d-41ce-bfb0-dbf7d285f5cc" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -312,6 +336,11 @@ namespace Swarojgaar.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Jobs_CategoryId",
+                table: "Jobs",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_UserId",
                 table: "Jobs",
                 column: "UserId");
@@ -358,6 +387,9 @@ namespace Swarojgaar.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }
