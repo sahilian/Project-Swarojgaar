@@ -16,7 +16,6 @@ namespace Swarojgaar.ViewModel.JobVM
         public string Title { get; set; }
         public int CategoryId { get; set; }
         public string JobSummary { get; set; }
-
         public string Description { get; set; }
         public double Salary { get; set; }
         public DateTime ExpiryDate { get; set; }
