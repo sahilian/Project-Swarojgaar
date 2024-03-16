@@ -2,9 +2,11 @@
 using MimeKit;
 using MailKit.Net.Smtp;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Swarojgaar.Controllers
 {
+    [Authorize(Roles = "Admin, Job_Provider")]
     public class EmailController : Controller
     {
         [HttpGet]

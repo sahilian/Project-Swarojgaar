@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Identity
-@model List<Swarojgaar.ViewModel.JobVM.GetAllJobsVM>
+@model Swarojgaar.ViewModel.HomeIndexVM.HomeIndexVM
 @using Microsoft.AspNetCore.Identity
 @using Swarojgaar.Data
 @inject SignInManager<User> SignInManager
@@ -42,6 +42,10 @@
     </div>
 </div>
 
+<div>
+    @await Html.PartialAsync("_GetRecommendedJobs", Model.RecommendedJobs)
+</div>
+
 <div class="d-flex align-items-center">
     <h1 style="margin-left: 12px; margin-right: 10px">Hot Jobs🔥</h1>
     <div class="search-container d-flex align-items-center">
@@ -66,7 +70,7 @@
 </div>
 
 <div id="jobListContainer">
-    @await Html.PartialAsync("_JobListPartial", Model)
+    @await Html.PartialAsync("_JobListPartial", Model.ActiveJobs)
 </div>
 <script src="lib/jquery/dist/jquery.min.js"></script>
 <script>

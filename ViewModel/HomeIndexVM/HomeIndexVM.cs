@@ -8,7 +8,7 @@ namespace Swarojgaar.ViewModel.HomeIndexVM
     public class HomeIndexVM
     {
         public List<GetAllJobsVM> ActiveJobs { get; set; }
-        public List<Job> RecommendedJobs { get; set; }
+        public IEnumerable<Job> RecommendedJobs { get; set; }
     }
 
 }

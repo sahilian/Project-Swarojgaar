@@ -8,6 +8,8 @@ using Swarojgaar.ViewModel.JobVM;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Swarojgaar.Data;
+using System.Security.Claims;
+using Swarojgaar.ViewModel.HomeIndexVM;
 
 namespace Swarojgaar.Controllers
 {
@@ -15,16 +17,19 @@ namespace Swarojgaar.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IJobService _jobService;
+        private readonly IRecommendationService _recommendationService;
         private readonly IDataProtector protector;
         private readonly ApplicationDbContext _dbContext;
         public HomeController(ILogger<HomeController> logger, 
             IJobService jobService, 
             IDataProtectionProvider dataProtectionProvider, 
-            DataProtectionPurposeStrings dataProtectionPurposeStrings, ApplicationDbContext dbContext)
+            DataProtectionPurposeStrings dataProtectionPurposeStrings, ApplicationDbContext dbContext, 
+            IRecommendationService recommendationService)
         {
             _logger = logger;
             _jobService = jobService;
             _dbContext = dbContext;
+            _recommendationService = recommendationService;
             protector = dataProtectionProvider
                 .CreateProtector(dataProtectionPurposeStrings.JobIdRouteValue);
         }
@@ -77,7 +82,18 @@ namespace Swarojgaar.Controllers
                     })
                     .ToList();
 
-                return View(activeJobs);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var recommendedJobs = _recommendationService.GetRecommendedJobs(userId);
+
+                // Create the view model and populate it with the data
+                var viewModel = new HomeIndexVM()
+                {
+                    RecommendedJobs = recommendedJobs,
+                    ActiveJobs = activeJobs
+                };
+
+                return View(viewModel);
             }
             catch (Exception ex)
             {

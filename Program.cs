@@ -20,6 +20,8 @@ builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
 builder.Services.AddScoped<ISavedJobRepository, SavedJobRepository>();
 builder.Services.AddScoped<ISaveJobService, SaveJobService>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddSingleton<DataProtectionPurposeStrings>();
 builder.Services.AddAutoMapper(typeof(Program));

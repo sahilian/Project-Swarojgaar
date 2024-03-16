@@ -31,6 +31,10 @@
 }
 <h2>Your Saved Jobs</h2>
 <hr/>
+@if (!userSavedJobs.Any())
+{
+    <h3 class="text-danger">You don't have any saved jobs yet!</h3>
+}
 @if (userSavedJobs.Any())
 {
     <table class="table table-striped table-bordered table-hover" style="background-color: white">
