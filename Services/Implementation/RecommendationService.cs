@@ -10,7 +10,7 @@ namespace Swarojgaar.Services.Implementation
     public class RecommendationService : IRecommendationService
     {
         private readonly ApplicationDbContext _dbContext;
-        private const double Threshold = 0.2; // Adjust as needed
+        private const double Threshold = 0.5; // Adjust as needed
         private const int MaxRecommendations = 6;
 
         public RecommendationService(ApplicationDbContext dbContext)
@@ -35,7 +35,6 @@ namespace Swarojgaar.Services.Implementation
             return recommendedJobs;
         }
 
-
         private double CalculateCosineSimilarity(List<string> userJobTitles, string jobTitle)
         {
             // Tokenize and vectorize job titles
@@ -59,22 +58,53 @@ namespace Swarojgaar.Services.Implementation
 
             foreach (var text in texts)
             {
-                var words = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var word in words)
+                var lowerText = text.ToLower(); // Convert text to lowercase
+                for (int start = 0; start < lowerText.Length; start++)
                 {
-                    if (vector.ContainsKey(word))
+                    for (int length = 1; length <= Math.Min(3, lowerText.Length - start); length++) // Adjust the maximum substring length as needed
                     {
-                        vector[word]++;
-                    }
-                    else
-                    {
-                        vector[word] = 1;
+                        var substring = lowerText.Substring(start, length);
+                        if (vector.ContainsKey(substring))
+                        {
+                            vector[substring]++;
+                        }
+                        else
+                        {
+                            vector[substring] = 1;
+                        }
                     }
                 }
             }
 
             return vector;
         }
+
+
+        private Dictionary<string, int> VectorizeText(string text)
+        {
+            text = text.ToLower(); // Convert text to lowercase
+
+            var vector = new Dictionary<string, int>();
+
+            for (int start = 0; start < text.Length; start++)
+            {
+                for (int length = 1; length <= Math.Min(3, text.Length - start); length++) // Adjust the maximum substring length as needed
+                {
+                    var substring = text.Substring(start, length);
+                    if (vector.ContainsKey(substring))
+                    {
+                        vector[substring]++;
+                    }
+                    else
+                    {
+                        vector[substring] = 1;
+                    }
+                }
+            }
+
+            return vector;
+        }
+
 
         private double DotProduct(Dictionary<string, int> vector1, Dictionary<string, int> vector2)
         {
@@ -100,6 +130,10 @@ namespace Swarojgaar.Services.Implementation
 
 
 
+
+
+//-------> This works on the basis of whole string matching instead of substring
+
 //using Swarojgaar.Data;
 //using Swarojgaar.Models;
 //using Swarojgaar.Services.Interface;
@@ -109,8 +143,8 @@ namespace Swarojgaar.Services.Implementation
 //    public class RecommendationService : IRecommendationService
 //    {
 //        private readonly ApplicationDbContext _dbContext;
-//        private const double Threshold = 0.5; // Adjust as needed
-//        private const int MaxRecommendations = 5;
+//        private const double Threshold = 0.2; // Adjust as needed
+//        private const int MaxRecommendations = 6;
 //        public RecommendationService(ApplicationDbContext dbContext)
 //        {
 //            _dbContext = dbContext;
